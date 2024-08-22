@@ -66,6 +66,13 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.material.icons.extended)
+
     implementation("androidx.compose.material3:material3:1.1.1") // Or latest version
     implementation("androidx.compose.material3:material3-window-size-class:1.1.1") // Or latest version
+
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("org.json:json:20210307")
+
+    implementation("com.squareup.moshi:moshi:1.14.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
 }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import it.unical.informatica.ea.sefora_frontend.activity.performRegistration
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
@@ -86,6 +87,7 @@ class LoginViewModel : ViewModel() {
                 this@LoginViewModel.error = "Invalid email or password"
             }
         }
+        performRegistration(this, onSuccess)
     }
 
     fun register(onSuccess: () -> Unit) {
