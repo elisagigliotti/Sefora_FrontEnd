@@ -15,6 +15,7 @@
 
 package it.unical.informatica.ea.sefora_frontend.apis
 
+import it.unical.informatica.ea.sefora_frontend.BuildConfig
 import java.io.IOException
 import okhttp3.OkHttpClient
 import okhttp3.HttpUrl
@@ -35,12 +36,14 @@ import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestConfig
 import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestMethod
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ResponseType
 import it.unical.informatica.ea.sefora_frontend.infrastructure.Success
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class UserControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHttpClient = ApiClient.defaultClient) : ApiClient(basePath, client) {
     companion object {
         @JvmStatic
         val defaultBasePath: String by lazy {
-            System.getProperties().getProperty(ApiClient.baseUrlKey, "http://localhost:8080")
+            System.getProperties().getProperty(ApiClient.baseUrlKey, BuildConfig.SERVER_ADDRESS)
         }
     }
 
@@ -56,10 +59,10 @@ class UserControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
      * @throws ServerException If the API returns a server error response
      */
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun authenticate(authenticationRequest: AuthenticationRequest) : AuthenticationResponse {
+    suspend fun authenticate(authenticationRequest: AuthenticationRequest) : AuthenticationResponse = withContext(Dispatchers.IO) {
         val localVarResponse = authenticateWithHttpInfo(authenticationRequest = authenticationRequest)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as AuthenticationResponse
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -108,7 +111,7 @@ class UserControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
             path = "/api/users/authenticate",
             query = localVariableQuery,
             headers = localVariableHeaders,
-            requiresAuthentication = true,
+            requiresAuthentication = false,
             body = localVariableBody
         )
     }
@@ -259,10 +262,10 @@ class UserControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
      * @throws ServerException If the API returns a server error response
      */
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun register(registerRequest: RegisterRequest) : AuthenticationResponse {
+    suspend fun register(registerRequest: RegisterRequest) : AuthenticationResponse = withContext(Dispatchers.IO) {
         val localVarResponse = registerWithHttpInfo(registerRequest = registerRequest)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as AuthenticationResponse
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -270,6 +273,7 @@ class UserControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
                 val localVarError = localVarResponse as ClientError<*>
                 throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
             }
+
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
                 throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
@@ -311,12 +315,8 @@ class UserControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
             path = "/api/users/register",
             query = localVariableQuery,
             headers = localVariableHeaders,
-            requiresAuthentication = true,
+            requiresAuthentication = false,
             body = localVariableBody
         )
     }
-
-
-    private fun encodeURIComponent(uriComponent: kotlin.String): kotlin.String =
-        HttpUrl.Builder().scheme("http").host("localhost").addPathSegment(uriComponent).build().encodedPathSegments[0]
 }

@@ -6,7 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.unical.informatica.ea.sefora_frontend.activity.performRegistration
+import it.unical.informatica.ea.sefora_frontend.apis.UserControllerApi
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ClientException
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ServerException
+import it.unical.informatica.ea.sefora_frontend.models.AuthenticationRequest
+import it.unical.informatica.ea.sefora_frontend.models.RegisterRequest
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.util.regex.Pattern
 
 class LoginViewModel : ViewModel() {
@@ -34,6 +40,8 @@ class LoginViewModel : ViewModel() {
     var isLoginMode by mutableStateOf(true)
         private set
     var error by mutableStateOf<String?>(null)
+
+    val _userControllerApi = UserControllerApi()
 
     fun onEmailChanged(newEmail: String) {
         email = newEmail
@@ -75,32 +83,74 @@ class LoginViewModel : ViewModel() {
 
     // Authentication/Registration Logic
     fun login(onSuccess: () -> Unit) {
+        // Clear any previous error
+        error = null
+
         viewModelScope.launch {
             try {
-                // Your login logic here (including validation if needed)
-
                 if (emailError == null && passwordError == null) {
-                    // Perform login (e.g., call API, validate credentials)
-                    onSuccess() // Call on success
+                    _userControllerApi.authenticate(
+                        AuthenticationRequest(
+                            email = email,
+                            password = password
+                        )
+                    )
+                    onSuccess()
+                } else {
+                    error = "Invalid email or password format"
                 }
-            } catch (error: Exception) {
-                this@LoginViewModel.error = "Invalid email or password"
+            } catch (e: ClientException) {
+                e.printStackTrace()
+                error = "Invalid email or password"
+            } catch (e: ServerException) {
+                e.printStackTrace()
+                error = "Server error, please try again later"
+            } catch (e: IOException) {
+                e.printStackTrace()
+                error = "Network error, please check your connection"
+            } catch (e: Exception) {
+                e.printStackTrace()
+                error = "An unexpected error occurred"
+            } finally {
+                password = ""
+                email = ""
             }
         }
-        performRegistration(this, onSuccess)
     }
+
 
     fun register(onSuccess: () -> Unit) {
         viewModelScope.launch {
             try {
-                // Your registration logic here (including validation if needed)
-
                 if (emailError == null && passwordError == null && firstNameError == null && lastNameError == null) {
-                    // Perform registration (e.g., call API, create account)
-                    onSuccess() // Call on success
+                    _userControllerApi.register(
+                        RegisterRequest(
+                            email = email,
+                            password = password,
+                            firstname = firstName,
+                            lastname = lastName,
+                            role = RegisterRequest.Role.USER
+                        )
+                    )
+                    onSuccess()
                 }
-            } catch (error: Exception) {
-                this@LoginViewModel.error = "Registration failed"
+            } catch (e: ClientException) {
+                e.printStackTrace()
+                error = "Invalid email or password"
+            } catch (e: ServerException) {
+                e.printStackTrace()
+                error = "Server error, please try again later"
+            } catch (e: IOException) {
+                e.printStackTrace()
+                error = "Network error, please check your connection"
+            } catch (e: Exception) {
+                e.printStackTrace()
+                error = "An unexpected error occurred"
+            } finally {
+                password = ""
+                email = ""
+                firstName = ""
+                lastName = ""
             }
         }
     }

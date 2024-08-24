@@ -21,7 +21,7 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -47,6 +47,25 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+    flavorDimensions += "environment"
+    productFlavors {
+        create("emu") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-dev"
+            buildConfigField("String", "SERVER_ADDRESS", "\"http://10.0.2.2:8080\"")
+        }
+        create("wifi") {
+            dimension = "environment"
+            applicationIdSuffix = ".wifi"
+            versionNameSuffix = "-wifi"
+            buildConfigField("String", "SERVER_ADDRESS", "\"http://192.168.1.251:8080\"")
+        }
+    }
 }
 
 dependencies {
@@ -66,13 +85,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.material.icons.extended)
-
-    implementation("androidx.compose.material3:material3:1.1.1") // Or latest version
-    implementation("androidx.compose.material3:material3-window-size-class:1.1.1") // Or latest version
-
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation("org.json:json:20210307")
-
-    implementation("com.squareup.moshi:moshi:1.14.0")
-    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
+    implementation(libs.material3)
+    implementation(libs.window.size)
+    implementation(libs.okhttp)
+    implementation(libs.json)
+    implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
 }
