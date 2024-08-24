@@ -128,10 +128,10 @@ class UserControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
      * @throws ServerException If the API returns a server error response
      */
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun changePassword(changePasswordRequest: ChangePasswordRequest) : kotlin.Any {
+    suspend fun changePassword(changePasswordRequest: ChangePasswordRequest) : kotlin.Any = withContext(Dispatchers.IO){
         val localVarResponse = changePasswordWithHttpInfo(changePasswordRequest = changePasswordRequest)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.Any
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -139,6 +139,7 @@ class UserControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
                 val localVarError = localVarResponse as ClientError<*>
                 throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
             }
+
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
                 throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
@@ -196,10 +197,10 @@ class UserControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
      * @throws ServerException If the API returns a server error response
      */
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun refreshToken() {
+    suspend fun refreshToken() = withContext(Dispatchers.IO){
         val localVarResponse = refreshTokenWithHttpInfo()
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> Unit
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -207,6 +208,7 @@ class UserControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
                 val localVarError = localVarResponse as ClientError<*>
                 throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
             }
+
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
                 throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)

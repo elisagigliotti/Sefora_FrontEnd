@@ -20,7 +20,7 @@ import okhttp3.OkHttpClient
 import okhttp3.HttpUrl
 
 import it.unical.informatica.ea.sefora_frontend.models.OrderProductDto
-
+import it.unical.informatica.ea.sefora_frontend.BuildConfig
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiClient
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiResponse
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ClientException
@@ -32,12 +32,14 @@ import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestConfig
 import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestMethod
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ResponseType
 import it.unical.informatica.ea.sefora_frontend.infrastructure.Success
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class OrderProductControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHttpClient = ApiClient.defaultClient) : ApiClient(basePath, client) {
     companion object {
         @JvmStatic
         val defaultBasePath: String by lazy {
-            System.getProperties().getProperty(ApiClient.baseUrlKey, "http://localhost:8080")
+            System.getProperties().getProperty(ApiClient.baseUrlKey, BuildConfig.SERVER_ADDRESS)
         }
     }
 
@@ -53,10 +55,10 @@ class OrderProductControllerApi(basePath: kotlin.String = defaultBasePath, clien
      * @throws ServerException If the API returns a server error response
      */
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun createOrderProduct(orderProductDto: OrderProductDto) : OrderProductDto {
+    suspend fun createOrderProduct(orderProductDto: OrderProductDto) : OrderProductDto = withContext(Dispatchers.IO){
         val localVarResponse = createOrderProductWithHttpInfo(orderProductDto = orderProductDto)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as OrderProductDto
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -64,6 +66,7 @@ class OrderProductControllerApi(basePath: kotlin.String = defaultBasePath, clien
                 val localVarError = localVarResponse as ClientError<*>
                 throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
             }
+
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
                 throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
@@ -123,10 +126,10 @@ class OrderProductControllerApi(basePath: kotlin.String = defaultBasePath, clien
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun getOrderProductsByOrderId(id: kotlin.Long) : kotlin.collections.List<OrderProductDto> {
+    suspend fun getOrderProductsByOrderId(id: kotlin.Long) : kotlin.collections.List<OrderProductDto> = withContext(Dispatchers.IO) {
         val localVarResponse = getOrderProductsByOrderIdWithHttpInfo(id = id)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<OrderProductDto>
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -134,6 +137,7 @@ class OrderProductControllerApi(basePath: kotlin.String = defaultBasePath, clien
                 val localVarError = localVarResponse as ClientError<*>
                 throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
             }
+
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
                 throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)

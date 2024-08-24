@@ -23,6 +23,7 @@ import it.unical.informatica.ea.sefora_frontend.models.WishlistProductDto
 
 import com.squareup.moshi.Json
 
+import it.unical.informatica.ea.sefora_frontend.BuildConfig
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiClient
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiResponse
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ClientException
@@ -36,12 +37,15 @@ import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestMethod
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ResponseType
 import it.unical.informatica.ea.sefora_frontend.infrastructure.Success
 import it.unical.informatica.ea.sefora_frontend.infrastructure.toMultiValue
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class WishlistProductControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHttpClient = ApiClient.defaultClient) : ApiClient(basePath, client) {
     companion object {
         @JvmStatic
         val defaultBasePath: String by lazy {
-            System.getProperties().getProperty(ApiClient.baseUrlKey, "http://localhost:8080")
+            System.getProperties().getProperty(ApiClient.baseUrlKey, BuildConfig.SERVER_ADDRESS)
+
         }
     }
 
@@ -57,10 +61,10 @@ class WishlistProductControllerApi(basePath: kotlin.String = defaultBasePath, cl
      * @throws ServerException If the API returns a server error response
      */
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun createWishlistProduct(wishlistProductDto: WishlistProductDto) : WishlistProductDto {
+    suspend fun createWishlistProduct(wishlistProductDto: WishlistProductDto) : WishlistProductDto= withContext(Dispatchers.IO) {
         val localVarResponse = createWishlistProductWithHttpInfo(wishlistProductDto = wishlistProductDto)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as WishlistProductDto
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -68,6 +72,7 @@ class WishlistProductControllerApi(basePath: kotlin.String = defaultBasePath, cl
                 val localVarError = localVarResponse as ClientError<*>
                 throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
             }
+
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
                 throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
@@ -126,10 +131,10 @@ class WishlistProductControllerApi(basePath: kotlin.String = defaultBasePath, cl
      * @throws ServerException If the API returns a server error response
      */
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun deleteWishlistProduct(id: kotlin.Long) {
+    suspend fun deleteWishlistProduct(id: kotlin.Long) = withContext(Dispatchers.IO){
         val localVarResponse = deleteWishlistProductWithHttpInfo(id = id)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> Unit
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -137,6 +142,7 @@ class WishlistProductControllerApi(basePath: kotlin.String = defaultBasePath, cl
                 val localVarError = localVarResponse as ClientError<*>
                 throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
             }
+
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
                 throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
@@ -195,10 +201,10 @@ class WishlistProductControllerApi(basePath: kotlin.String = defaultBasePath, cl
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun getAllWishlistProductByWishlistId(id: kotlin.Long) : kotlin.collections.List<WishlistProductDto> {
+    suspend fun getAllWishlistProductByWishlistId(id: kotlin.Long) : kotlin.collections.List<WishlistProductDto> = withContext(Dispatchers.IO){
         val localVarResponse = getAllWishlistProductByWishlistIdWithHttpInfo(id = id)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<WishlistProductDto>
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -206,6 +212,7 @@ class WishlistProductControllerApi(basePath: kotlin.String = defaultBasePath, cl
                 val localVarError = localVarResponse as ClientError<*>
                 throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
             }
+
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
                 throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)

@@ -20,7 +20,7 @@ import okhttp3.OkHttpClient
 import okhttp3.HttpUrl
 
 import it.unical.informatica.ea.sefora_frontend.models.CartProductDto
-
+import it.unical.informatica.ea.sefora_frontend.BuildConfig
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiClient
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiResponse
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ClientException
@@ -32,12 +32,14 @@ import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestConfig
 import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestMethod
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ResponseType
 import it.unical.informatica.ea.sefora_frontend.infrastructure.Success
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class CartProductControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHttpClient = ApiClient.defaultClient) : ApiClient(basePath, client) {
     companion object {
         @JvmStatic
         val defaultBasePath: String by lazy {
-            System.getProperties().getProperty(ApiClient.baseUrlKey, "http://localhost:8080")
+            System.getProperties().getProperty(ApiClient.baseUrlKey, BuildConfig.SERVER_ADDRESS)
         }
     }
 
@@ -53,10 +55,10 @@ class CartProductControllerApi(basePath: kotlin.String = defaultBasePath, client
      * @throws ServerException If the API returns a server error response
      */
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun createCartProduct(cartProductDto: CartProductDto) : CartProductDto {
+    suspend fun createCartProduct(cartProductDto: CartProductDto) : CartProductDto = withContext(Dispatchers.IO) {
         val localVarResponse = createCartProductWithHttpInfo(cartProductDto = cartProductDto)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as CartProductDto
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -64,6 +66,7 @@ class CartProductControllerApi(basePath: kotlin.String = defaultBasePath, client
                 val localVarError = localVarResponse as ClientError<*>
                 throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
             }
+
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
                 throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
@@ -122,10 +125,10 @@ class CartProductControllerApi(basePath: kotlin.String = defaultBasePath, client
      * @throws ServerException If the API returns a server error response
      */
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun deleteCartProduct(id: kotlin.Long) : kotlin.String {
+    suspend fun deleteCartProduct(id: kotlin.Long) : kotlin.String = withContext(Dispatchers.IO) {
         val localVarResponse = deleteCartProductWithHttpInfo(id = id)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -133,6 +136,7 @@ class CartProductControllerApi(basePath: kotlin.String = defaultBasePath, client
                 val localVarError = localVarResponse as ClientError<*>
                 throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
             }
+
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
                 throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
@@ -191,10 +195,10 @@ class CartProductControllerApi(basePath: kotlin.String = defaultBasePath, client
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun getAllCartProductByCartId(id: kotlin.Long) : kotlin.collections.List<CartProductDto> {
+    suspend fun getAllCartProductByCartId(id: kotlin.Long) : kotlin.collections.List<CartProductDto> = withContext(Dispatchers.IO) {
         val localVarResponse = getAllCartProductByCartIdWithHttpInfo(id = id)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<CartProductDto>
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -202,6 +206,7 @@ class CartProductControllerApi(basePath: kotlin.String = defaultBasePath, client
                 val localVarError = localVarResponse as ClientError<*>
                 throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
             }
+
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
                 throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
@@ -259,10 +264,10 @@ class CartProductControllerApi(basePath: kotlin.String = defaultBasePath, client
      * @throws ServerException If the API returns a server error response
      */
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun updateCartProduct(cartProductDto: CartProductDto) : kotlin.String {
+    suspend fun updateCartProduct(cartProductDto: CartProductDto) : kotlin.String = withContext(Dispatchers.IO){
         val localVarResponse = updateCartProductWithHttpInfo(cartProductDto = cartProductDto)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -270,6 +275,7 @@ class CartProductControllerApi(basePath: kotlin.String = defaultBasePath, client
                 val localVarError = localVarResponse as ClientError<*>
                 throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
             }
+
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
                 throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)

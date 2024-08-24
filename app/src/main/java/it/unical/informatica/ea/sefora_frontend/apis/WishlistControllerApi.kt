@@ -23,6 +23,7 @@ import it.unical.informatica.ea.sefora_frontend.models.WishlistDto
 
 import com.squareup.moshi.Json
 
+import it.unical.informatica.ea.sefora_frontend.BuildConfig
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiClient
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiResponse
 import it.unical.informatica.ea.sefora_frontend.infrastructure.ClientException
@@ -41,7 +42,7 @@ class WishlistControllerApi(basePath: kotlin.String = defaultBasePath, client: O
     companion object {
         @JvmStatic
         val defaultBasePath: String by lazy {
-            System.getProperties().getProperty(ApiClient.baseUrlKey, "http://localhost:8080")
+            System.getProperties().getProperty(ApiClient.baseUrlKey, BuildConfig.SERVER_ADDRESS)
         }
     }
 
