@@ -1,4 +1,4 @@
-package it.unical.informatica.ea.sefora_frontend.infrastructure
+package org.openapitools.client.infrastructure
 
 /**
  * Defines a config object for a given request.
@@ -15,5 +15,5 @@ data class RequestConfig<T>(
     val params: MutableMap<String, Any> = mutableMapOf(),
     val query: MutableMap<String, List<String>> = mutableMapOf(),
     val requiresAuthentication: Boolean,
-    val body: T? = null
+    val body: T? = null,
 )

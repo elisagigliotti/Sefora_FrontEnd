@@ -10,29 +10,29 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
-package it.unical.informatica.ea.sefora_frontend.models
-
+package org.openapitools.client.models
 
 import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 
 /**
- * 
  *
- * @param accessToken 
- * @param refreshToken 
+ *
+ * @param accessToken
+ * @param refreshToken
+ * @param user
+ * @param expiresIn
  */
 
-
-data class AuthenticationResponse (
-
+data class AuthenticationResponse(
     @Json(name = "access_token")
     val accessToken: kotlin.String? = null,
-
     @Json(name = "refresh_token")
-    val refreshToken: kotlin.String? = null
-
+    val refreshToken: kotlin.String? = null,
+    @Json(name = "user")
+    val account: AccountDto? = null,
+    @Json(name = "expires_in")
+    val expiresIn: kotlin.Long? = null,
 )

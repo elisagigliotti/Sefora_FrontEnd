@@ -10,43 +10,42 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport", "unused"
+    "UnusedImport",
 )
 
-package it.unical.informatica.ea.sefora_frontend.apis
+package org.openapitools.client.apis
 
-import java.io.IOException
-import okhttp3.OkHttpClient
 import okhttp3.HttpUrl
+import okhttp3.OkHttpClient
+import org.openapitools.client.infrastructure.ApiClient
+import org.openapitools.client.infrastructure.ApiResponse
+import org.openapitools.client.infrastructure.ClientError
+import org.openapitools.client.infrastructure.ClientException
+import org.openapitools.client.infrastructure.MultiValueMap
+import org.openapitools.client.infrastructure.RequestConfig
+import org.openapitools.client.infrastructure.RequestMethod
+import org.openapitools.client.infrastructure.ResponseType
+import org.openapitools.client.infrastructure.ServerError
+import org.openapitools.client.infrastructure.ServerException
+import org.openapitools.client.infrastructure.Success
+import org.openapitools.client.models.ProductDto
+import java.io.IOException
 
-import it.unical.informatica.ea.sefora_frontend.models.ProductDto
-import it.unical.informatica.ea.sefora_frontend.BuildConfig
-import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiClient
-import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiResponse
-import it.unical.informatica.ea.sefora_frontend.infrastructure.ClientException
-import it.unical.informatica.ea.sefora_frontend.infrastructure.ClientError
-import it.unical.informatica.ea.sefora_frontend.infrastructure.ServerException
-import it.unical.informatica.ea.sefora_frontend.infrastructure.ServerError
-import it.unical.informatica.ea.sefora_frontend.infrastructure.MultiValueMap
-import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestConfig
-import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestMethod
-import it.unical.informatica.ea.sefora_frontend.infrastructure.ResponseType
-import it.unical.informatica.ea.sefora_frontend.infrastructure.Success
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-
-class ProductControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHttpClient = ApiClient.defaultClient) : ApiClient(basePath, client) {
+class ProductControllerApi(
+    basePath: kotlin.String = defaultBasePath,
+    client: OkHttpClient = ApiClient.defaultClient,
+) : ApiClient(basePath, client) {
     companion object {
         @JvmStatic
         val defaultBasePath: String by lazy {
-            System.getProperties().getProperty(ApiClient.baseUrlKey, BuildConfig.SERVER_ADDRESS)
+            System.getProperties().getProperty(ApiClient.baseUrlKey, "http://localhost:8080")
         }
     }
 
     /**
-     * 
-     * 
-     * @param productDto 
+     *
+     *
+     * @param productDto
      * @return ProductDto
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -54,69 +53,84 @@ class ProductControllerApi(basePath: kotlin.String = defaultBasePath, client: Ok
      * @throws ClientException If the API returns a client error response
      * @throws ServerException If the API returns a server error response
      */
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    suspend fun createProduct(productDto: ProductDto) : ProductDto = withContext(Dispatchers.IO){
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun createProduct(productDto: ProductDto): ProductDto {
         val localVarResponse = createProductWithHttpInfo(productDto = productDto)
 
-        return@withContext when (localVarResponse.responseType) {
+        return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as ProductDto
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
             }
-
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
             }
         }
     }
 
     /**
-     * 
-     * 
-     * @param productDto 
+     *
+     *
+     * @param productDto
      * @return ApiResponse<ProductDto?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
+    @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun createProductWithHttpInfo(productDto: ProductDto) : ApiResponse<ProductDto?> {
+    fun createProductWithHttpInfo(productDto: ProductDto): ApiResponse<ProductDto?> {
         val localVariableConfig = createProductRequestConfig(productDto = productDto)
 
         return request<ProductDto, ProductDto>(
-            localVariableConfig
+            localVariableConfig,
         )
     }
 
     /**
      * To obtain the request config of the operation createProduct
      *
-     * @param productDto 
+     * @param productDto
      * @return RequestConfig
      */
-    fun createProductRequestConfig(productDto: ProductDto) : RequestConfig<ProductDto> {
+    fun createProductRequestConfig(productDto: ProductDto): RequestConfig<ProductDto> {
         val localVariableBody = productDto
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
         localVariableHeaders["Content-Type"] = "application/json"
-        
+
         return RequestConfig(
             method = RequestMethod.POST,
             path = "/api/product",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
-            body = localVariableBody
+            body = localVariableBody,
         )
     }
 
     /**
-     * 
-     * 
-     * @param id 
+     *
+     *
+     * @param id
      * @return kotlin.String
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -124,67 +138,82 @@ class ProductControllerApi(basePath: kotlin.String = defaultBasePath, client: Ok
      * @throws ClientException If the API returns a client error response
      * @throws ServerException If the API returns a server error response
      */
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    suspend fun deleteProduct(id: kotlin.Long) : kotlin.String = withContext(Dispatchers.IO){
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun deleteProduct(id: kotlin.Long): kotlin.String {
         val localVarResponse = deleteProductWithHttpInfo(id = id)
 
-        return@withContext when (localVarResponse.responseType) {
+        return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
             }
-
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
             }
         }
     }
 
     /**
-     * 
-     * 
-     * @param id 
+     *
+     *
+     * @param id
      * @return ApiResponse<kotlin.String?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
+    @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun deleteProductWithHttpInfo(id: kotlin.Long) : ApiResponse<kotlin.String?> {
+    fun deleteProductWithHttpInfo(id: kotlin.Long): ApiResponse<kotlin.String?> {
         val localVariableConfig = deleteProductRequestConfig(id = id)
 
         return request<Unit, kotlin.String>(
-            localVariableConfig
+            localVariableConfig,
         )
     }
 
     /**
      * To obtain the request config of the operation deleteProduct
      *
-     * @param id 
+     * @param id
      * @return RequestConfig
      */
-    fun deleteProductRequestConfig(id: kotlin.Long) : RequestConfig<Unit> {
+    fun deleteProductRequestConfig(id: kotlin.Long): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
-        
+
         return RequestConfig(
             method = RequestMethod.DELETE,
-            path = "/api/product/{id}".replace("{"+"id"+"}", encodeURIComponent(id.toString())),
+            path = "/api/product/{id}".replace("{" + "id" + "}", encodeURIComponent(id.toString())),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
-            body = localVariableBody
+            body = localVariableBody,
         )
     }
 
     /**
-     * 
-     * 
+     *
+     *
      * @return kotlin.collections.List<ProductDto>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -193,39 +222,134 @@ class ProductControllerApi(basePath: kotlin.String = defaultBasePath, client: Ok
      * @throws ServerException If the API returns a server error response
      */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    suspend fun getAllProducts() : kotlin.collections.List<ProductDto> = withContext(Dispatchers.IO) {
-        val localVarResponse = getAllProductsWithHttpInfo()
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun findProductsByCurrentUser(): kotlin.collections.List<ProductDto> {
+        val localVarResponse = findProductsByCurrentUserWithHttpInfo()
 
-        return@withContext when (localVarResponse.responseType) {
+        return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<ProductDto>
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
             }
-
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
             }
         }
     }
 
     /**
-     * 
-     * 
+     *
+     *
      * @return ApiResponse<kotlin.collections.List<ProductDto>?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
+    @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun getAllProductsWithHttpInfo() : ApiResponse<kotlin.collections.List<ProductDto>?> {
+    fun findProductsByCurrentUserWithHttpInfo(): ApiResponse<kotlin.collections.List<ProductDto>?> {
+        val localVariableConfig = findProductsByCurrentUserRequestConfig()
+
+        return request<Unit, kotlin.collections.List<ProductDto>>(
+            localVariableConfig,
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation findProductsByCurrentUser
+     *
+     * @return RequestConfig
+     */
+    fun findProductsByCurrentUserRequestConfig(): RequestConfig<Unit> {
+        val localVariableBody = null
+        val localVariableQuery: MultiValueMap = mutableMapOf()
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+
+        return RequestConfig(
+            method = RequestMethod.GET,
+            path = "/api/product/current",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            body = localVariableBody,
+        )
+    }
+
+    /**
+     *
+     *
+     * @return kotlin.collections.List<ProductDto>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun getAllProducts(): kotlin.collections.List<ProductDto> {
+        val localVarResponse = getAllProductsWithHttpInfo()
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<ProductDto>
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return ApiResponse<kotlin.collections.List<ProductDto>?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class)
+    fun getAllProductsWithHttpInfo(): ApiResponse<kotlin.collections.List<ProductDto>?> {
         val localVariableConfig = getAllProductsRequestConfig()
 
         return request<Unit, kotlin.collections.List<ProductDto>>(
-            localVariableConfig
+            localVariableConfig,
         )
     }
 
@@ -234,25 +358,25 @@ class ProductControllerApi(basePath: kotlin.String = defaultBasePath, client: Ok
      *
      * @return RequestConfig
      */
-    fun getAllProductsRequestConfig() : RequestConfig<Unit> {
+    fun getAllProductsRequestConfig(): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
-        
+
         return RequestConfig(
             method = RequestMethod.GET,
             path = "/api/product/all",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
-            body = localVariableBody
+            body = localVariableBody,
         )
     }
 
     /**
-     * 
-     * 
-     * @param id 
+     *
+     *
+     * @param id
      * @return kotlin.collections.List<ProductDto>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -261,68 +385,82 @@ class ProductControllerApi(basePath: kotlin.String = defaultBasePath, client: Ok
      * @throws ServerException If the API returns a server error response
      */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    suspend fun getAllProductsByOwner(id: kotlin.Long) : kotlin.collections.List<ProductDto> = withContext(Dispatchers.IO){
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun getAllProductsByOwner(id: kotlin.Long): kotlin.collections.List<ProductDto> {
         val localVarResponse = getAllProductsByOwnerWithHttpInfo(id = id)
 
-        return@withContext when (localVarResponse.responseType) {
+        return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<ProductDto>
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
             }
-
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
             }
         }
     }
 
     /**
-     * 
-     * 
-     * @param id 
+     *
+     *
+     * @param id
      * @return ApiResponse<kotlin.collections.List<ProductDto>?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
+    @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun getAllProductsByOwnerWithHttpInfo(id: kotlin.Long) : ApiResponse<kotlin.collections.List<ProductDto>?> {
+    fun getAllProductsByOwnerWithHttpInfo(id: kotlin.Long): ApiResponse<kotlin.collections.List<ProductDto>?> {
         val localVariableConfig = getAllProductsByOwnerRequestConfig(id = id)
 
         return request<Unit, kotlin.collections.List<ProductDto>>(
-            localVariableConfig
+            localVariableConfig,
         )
     }
 
     /**
      * To obtain the request config of the operation getAllProductsByOwner
      *
-     * @param id 
+     * @param id
      * @return RequestConfig
      */
-    fun getAllProductsByOwnerRequestConfig(id: kotlin.Long) : RequestConfig<Unit> {
+    fun getAllProductsByOwnerRequestConfig(id: kotlin.Long): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
-        
+
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/api/product/user/{id}".replace("{"+"id"+"}", encodeURIComponent(id.toString())),
+            path = "/api/product/user/{id}".replace("{" + "id" + "}", encodeURIComponent(id.toString())),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
-            body = localVariableBody
+            body = localVariableBody,
         )
     }
 
     /**
-     * 
-     * 
-     * @param id 
+     *
+     *
+     * @param id
      * @return ProductDto
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -330,65 +468,85 @@ class ProductControllerApi(basePath: kotlin.String = defaultBasePath, client: Ok
      * @throws ClientException If the API returns a client error response
      * @throws ServerException If the API returns a server error response
      */
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    suspend fun getProductById(id: kotlin.Long) : ProductDto = withContext(Dispatchers.IO){
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun getProductById(id: kotlin.Long): ProductDto {
         val localVarResponse = getProductByIdWithHttpInfo(id = id)
 
-        return@withContext when (localVarResponse.responseType) {
+        return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as ProductDto
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
             }
-
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
             }
         }
     }
 
     /**
-     * 
-     * 
-     * @param id 
+     *
+     *
+     * @param id
      * @return ApiResponse<ProductDto?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
+    @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun getProductByIdWithHttpInfo(id: kotlin.Long) : ApiResponse<ProductDto?> {
+    fun getProductByIdWithHttpInfo(id: kotlin.Long): ApiResponse<ProductDto?> {
         val localVariableConfig = getProductByIdRequestConfig(id = id)
 
         return request<Unit, ProductDto>(
-            localVariableConfig
+            localVariableConfig,
         )
     }
 
     /**
      * To obtain the request config of the operation getProductById
      *
-     * @param id 
+     * @param id
      * @return RequestConfig
      */
-    fun getProductByIdRequestConfig(id: kotlin.Long) : RequestConfig<Unit> {
+    fun getProductByIdRequestConfig(id: kotlin.Long): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
-        
+
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/api/product/product/{id}".replace("{"+"id"+"}", encodeURIComponent(id.toString())),
+            path = "/api/product/product/{id}".replace("{" + "id" + "}", encodeURIComponent(id.toString())),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
-            body = localVariableBody
+            body = localVariableBody,
         )
     }
 
-
     private fun encodeURIComponent(uriComponent: kotlin.String): kotlin.String =
-        HttpUrl.Builder().scheme("http").host("localhost").addPathSegment(uriComponent).build().encodedPathSegments[0]
+        HttpUrl
+            .Builder()
+            .scheme("http")
+            .host("localhost")
+            .addPathSegment(uriComponent)
+            .build()
+            .encodedPathSegments[0]
 }

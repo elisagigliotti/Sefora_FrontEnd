@@ -1,4 +1,4 @@
-package it.unical.informatica.ea.sefora_frontend.infrastructure
+package org.openapitools.client.infrastructure
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson

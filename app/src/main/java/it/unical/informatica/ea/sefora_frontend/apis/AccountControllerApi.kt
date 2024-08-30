@@ -28,10 +28,14 @@ import org.openapitools.client.infrastructure.ResponseType
 import org.openapitools.client.infrastructure.ServerError
 import org.openapitools.client.infrastructure.ServerException
 import org.openapitools.client.infrastructure.Success
-import org.openapitools.client.models.WishlistDto
+import org.openapitools.client.models.AccountDto
+import org.openapitools.client.models.AuthenticationRequest
+import org.openapitools.client.models.AuthenticationResponse
+import org.openapitools.client.models.ChangePasswordRequest
+import org.openapitools.client.models.RegisterRequest
 import java.io.IOException
 
-class WishlistControllerApi(
+class AccountControllerApi(
     basePath: kotlin.String = defaultBasePath,
     client: OkHttpClient = ApiClient.defaultClient,
 ) : ApiClient(basePath, client) {
@@ -45,9 +49,8 @@ class WishlistControllerApi(
     /**
      *
      *
-     * @param wishlistId
-     * @param productId
-     * @return kotlin.String
+     * @param authenticationRequest
+     * @return AuthenticationResponse
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      * @throws UnsupportedOperationException If the API returns an informational or redirection response
@@ -62,14 +65,11 @@ class WishlistControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun addProductToWishlist(
-        wishlistId: kotlin.Long,
-        productId: kotlin.Long,
-    ): kotlin.String {
-        val localVarResponse = addProductToWishlistWithHttpInfo(wishlistId = wishlistId, productId = productId)
+    fun authenticate(authenticationRequest: AuthenticationRequest): AuthenticationResponse {
+        val localVarResponse = authenticateWithHttpInfo(authenticationRequest = authenticationRequest)
 
         return when (localVarResponse.responseType) {
-            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
+            ResponseType.Success -> (localVarResponse as Success<*>).data as AuthenticationResponse
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
@@ -94,234 +94,36 @@ class WishlistControllerApi(
     /**
      *
      *
-     * @param wishlistId
-     * @param productId
-     * @return ApiResponse<kotlin.String?>
+     * @param authenticationRequest
+     * @return ApiResponse<AuthenticationResponse?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun addProductToWishlistWithHttpInfo(
-        wishlistId: kotlin.Long,
-        productId: kotlin.Long,
-    ): ApiResponse<kotlin.String?> {
-        val localVariableConfig = addProductToWishlistRequestConfig(wishlistId = wishlistId, productId = productId)
+    fun authenticateWithHttpInfo(authenticationRequest: AuthenticationRequest): ApiResponse<AuthenticationResponse?> {
+        val localVariableConfig = authenticateRequestConfig(authenticationRequest = authenticationRequest)
 
-        return request<Unit, kotlin.String>(
+        return request<AuthenticationRequest, AuthenticationResponse>(
             localVariableConfig,
         )
     }
 
     /**
-     * To obtain the request config of the operation addProductToWishlist
+     * To obtain the request config of the operation authenticate
      *
-     * @param wishlistId
-     * @param productId
+     * @param authenticationRequest
      * @return RequestConfig
      */
-    fun addProductToWishlistRequestConfig(
-        wishlistId: kotlin.Long,
-        productId: kotlin.Long,
-    ): RequestConfig<Unit> {
-        val localVariableBody = null
-        val localVariableQuery: MultiValueMap =
-            mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
-                .apply {
-                    put("wishlistId", listOf(wishlistId.toString()))
-                    put("productId", listOf(productId.toString()))
-                }
-        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
-
-        return RequestConfig(
-            method = RequestMethod.PATCH,
-            path = "/api/wishlist/addProduct",
-            query = localVariableQuery,
-            headers = localVariableHeaders,
-            requiresAuthentication = true,
-            body = localVariableBody,
-        )
-    }
-
-    /**
-     *
-     *
-     * @param wishlistId
-     * @param userId
-     * @return kotlin.String
-     * @throws IllegalStateException If the request is not correctly configured
-     * @throws IOException Rethrows the OkHttp execute method exception
-     * @throws UnsupportedOperationException If the API returns an informational or redirection response
-     * @throws ClientException If the API returns a client error response
-     * @throws ServerException If the API returns a server error response
-     */
-    @Suppress("UNCHECKED_CAST")
-    @Throws(
-        IllegalStateException::class,
-        IOException::class,
-        UnsupportedOperationException::class,
-        ClientException::class,
-        ServerException::class,
-    )
-    fun addUserToWishlist(
-        wishlistId: kotlin.Long,
-        userId: kotlin.Long,
-    ): kotlin.String {
-        val localVarResponse = addUserToWishlistWithHttpInfo(wishlistId = wishlistId, userId = userId)
-
-        return when (localVarResponse.responseType) {
-            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
-            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
-            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
-            ResponseType.ClientError -> {
-                val localVarError = localVarResponse as ClientError<*>
-                throw ClientException(
-                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
-                    localVarError.statusCode,
-                    localVarResponse,
-                )
-            }
-            ResponseType.ServerError -> {
-                val localVarError = localVarResponse as ServerError<*>
-                throw ServerException(
-                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
-                    localVarError.statusCode,
-                    localVarResponse,
-                )
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @param wishlistId
-     * @param userId
-     * @return ApiResponse<kotlin.String?>
-     * @throws IllegalStateException If the request is not correctly configured
-     * @throws IOException Rethrows the OkHttp execute method exception
-     */
-    @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class)
-    fun addUserToWishlistWithHttpInfo(
-        wishlistId: kotlin.Long,
-        userId: kotlin.Long,
-    ): ApiResponse<kotlin.String?> {
-        val localVariableConfig = addUserToWishlistRequestConfig(wishlistId = wishlistId, userId = userId)
-
-        return request<Unit, kotlin.String>(
-            localVariableConfig,
-        )
-    }
-
-    /**
-     * To obtain the request config of the operation addUserToWishlist
-     *
-     * @param wishlistId
-     * @param userId
-     * @return RequestConfig
-     */
-    fun addUserToWishlistRequestConfig(
-        wishlistId: kotlin.Long,
-        userId: kotlin.Long,
-    ): RequestConfig<Unit> {
-        val localVariableBody = null
-        val localVariableQuery: MultiValueMap =
-            mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
-                .apply {
-                    put("wishlistId", listOf(wishlistId.toString()))
-                    put("userId", listOf(userId.toString()))
-                }
-        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
-
-        return RequestConfig(
-            method = RequestMethod.PATCH,
-            path = "/api/wishlist/addUser",
-            query = localVariableQuery,
-            headers = localVariableHeaders,
-            requiresAuthentication = true,
-            body = localVariableBody,
-        )
-    }
-
-    /**
-     *
-     *
-     * @param wishlistDto
-     * @return WishlistDto
-     * @throws IllegalStateException If the request is not correctly configured
-     * @throws IOException Rethrows the OkHttp execute method exception
-     * @throws UnsupportedOperationException If the API returns an informational or redirection response
-     * @throws ClientException If the API returns a client error response
-     * @throws ServerException If the API returns a server error response
-     */
-    @Suppress("UNCHECKED_CAST")
-    @Throws(
-        IllegalStateException::class,
-        IOException::class,
-        UnsupportedOperationException::class,
-        ClientException::class,
-        ServerException::class,
-    )
-    fun createWishlist(wishlistDto: WishlistDto): WishlistDto {
-        val localVarResponse = createWishlistWithHttpInfo(wishlistDto = wishlistDto)
-
-        return when (localVarResponse.responseType) {
-            ResponseType.Success -> (localVarResponse as Success<*>).data as WishlistDto
-            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
-            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
-            ResponseType.ClientError -> {
-                val localVarError = localVarResponse as ClientError<*>
-                throw ClientException(
-                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
-                    localVarError.statusCode,
-                    localVarResponse,
-                )
-            }
-            ResponseType.ServerError -> {
-                val localVarError = localVarResponse as ServerError<*>
-                throw ServerException(
-                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
-                    localVarError.statusCode,
-                    localVarResponse,
-                )
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @param wishlistDto
-     * @return ApiResponse<WishlistDto?>
-     * @throws IllegalStateException If the request is not correctly configured
-     * @throws IOException Rethrows the OkHttp execute method exception
-     */
-    @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class)
-    fun createWishlistWithHttpInfo(wishlistDto: WishlistDto): ApiResponse<WishlistDto?> {
-        val localVariableConfig = createWishlistRequestConfig(wishlistDto = wishlistDto)
-
-        return request<WishlistDto, WishlistDto>(
-            localVariableConfig,
-        )
-    }
-
-    /**
-     * To obtain the request config of the operation createWishlist
-     *
-     * @param wishlistDto
-     * @return RequestConfig
-     */
-    fun createWishlistRequestConfig(wishlistDto: WishlistDto): RequestConfig<WishlistDto> {
-        val localVariableBody = wishlistDto
+    fun authenticateRequestConfig(authenticationRequest: AuthenticationRequest): RequestConfig<AuthenticationRequest> {
+        val localVariableBody = authenticationRequest
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
         localVariableHeaders["Content-Type"] = "application/json"
 
         return RequestConfig(
             method = RequestMethod.POST,
-            path = "/api/wishlist",
+            path = "/api/account/authenticate",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -332,8 +134,8 @@ class WishlistControllerApi(
     /**
      *
      *
-     * @param id
-     * @return kotlin.String
+     * @param userId
+     * @return kotlin.Any
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      * @throws UnsupportedOperationException If the API returns an informational or redirection response
@@ -348,11 +150,11 @@ class WishlistControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun deleteWishlist(id: kotlin.Long): kotlin.String {
-        val localVarResponse = deleteWishlistWithHttpInfo(id = id)
+    fun banUser(userId: kotlin.Long): kotlin.Any {
+        val localVarResponse = banUserWithHttpInfo(userId = userId)
 
         return when (localVarResponse.responseType) {
-            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
+            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.Any
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
@@ -377,35 +179,204 @@ class WishlistControllerApi(
     /**
      *
      *
-     * @param id
-     * @return ApiResponse<kotlin.String?>
+     * @param userId
+     * @return ApiResponse<kotlin.Any?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun deleteWishlistWithHttpInfo(id: kotlin.Long): ApiResponse<kotlin.String?> {
-        val localVariableConfig = deleteWishlistRequestConfig(id = id)
+    fun banUserWithHttpInfo(userId: kotlin.Long): ApiResponse<kotlin.Any?> {
+        val localVariableConfig = banUserRequestConfig(userId = userId)
 
-        return request<Unit, kotlin.String>(
+        return request<Unit, kotlin.Any>(
             localVariableConfig,
         )
     }
 
     /**
-     * To obtain the request config of the operation deleteWishlist
+     * To obtain the request config of the operation banUser
      *
-     * @param id
+     * @param userId
      * @return RequestConfig
      */
-    fun deleteWishlistRequestConfig(id: kotlin.Long): RequestConfig<Unit> {
+    fun banUserRequestConfig(userId: kotlin.Long): RequestConfig<Unit> {
+        val localVariableBody = null
+        val localVariableQuery: MultiValueMap = mutableMapOf()
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+
+        return RequestConfig(
+            method = RequestMethod.PATCH,
+            path = "/api/account/ban/{userId}".replace("{" + "userId" + "}", encodeURIComponent(userId.toString())),
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            body = localVariableBody,
+        )
+    }
+
+    /**
+     *
+     *
+     * @param changePasswordRequest
+     * @return kotlin.Any
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun changePassword(changePasswordRequest: ChangePasswordRequest): kotlin.Any {
+        val localVarResponse = changePasswordWithHttpInfo(changePasswordRequest = changePasswordRequest)
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.Any
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param changePasswordRequest
+     * @return ApiResponse<kotlin.Any?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class)
+    fun changePasswordWithHttpInfo(changePasswordRequest: ChangePasswordRequest): ApiResponse<kotlin.Any?> {
+        val localVariableConfig = changePasswordRequestConfig(changePasswordRequest = changePasswordRequest)
+
+        return request<ChangePasswordRequest, kotlin.Any>(
+            localVariableConfig,
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation changePassword
+     *
+     * @param changePasswordRequest
+     * @return RequestConfig
+     */
+    fun changePasswordRequestConfig(changePasswordRequest: ChangePasswordRequest): RequestConfig<ChangePasswordRequest> {
+        val localVariableBody = changePasswordRequest
+        val localVariableQuery: MultiValueMap = mutableMapOf()
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+        localVariableHeaders["Content-Type"] = "application/json"
+
+        return RequestConfig(
+            method = RequestMethod.PATCH,
+            path = "/api/account",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            body = localVariableBody,
+        )
+    }
+
+    /**
+     *
+     *
+     * @param userId
+     * @return kotlin.Any
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun deleteUser(userId: kotlin.Long): kotlin.Any {
+        val localVarResponse = deleteUserWithHttpInfo(userId = userId)
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.Any
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param userId
+     * @return ApiResponse<kotlin.Any?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class)
+    fun deleteUserWithHttpInfo(userId: kotlin.Long): ApiResponse<kotlin.Any?> {
+        val localVariableConfig = deleteUserRequestConfig(userId = userId)
+
+        return request<Unit, kotlin.Any>(
+            localVariableConfig,
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation deleteUser
+     *
+     * @param userId
+     * @return RequestConfig
+     */
+    fun deleteUserRequestConfig(userId: kotlin.Long): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
 
         return RequestConfig(
             method = RequestMethod.DELETE,
-            path = "/api/wishlist/{id}".replace("{" + "id" + "}", encodeURIComponent(id.toString())),
+            path = "/api/account/delete/{userId}".replace("{" + "userId" + "}", encodeURIComponent(userId.toString())),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -416,7 +387,7 @@ class WishlistControllerApi(
     /**
      *
      *
-     * @return kotlin.collections.List<WishlistDto>
+     * @return AccountDto
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      * @throws UnsupportedOperationException If the API returns an informational or redirection response
@@ -431,11 +402,11 @@ class WishlistControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun getCurrentUserWishlists(): kotlin.collections.List<WishlistDto> {
-        val localVarResponse = getCurrentUserWishlistsWithHttpInfo()
+    fun getConnectedUser(): AccountDto {
+        val localVarResponse = getConnectedUserWithHttpInfo()
 
         return when (localVarResponse.responseType) {
-            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<WishlistDto>
+            ResponseType.Success -> (localVarResponse as Success<*>).data as AccountDto
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
@@ -460,33 +431,33 @@ class WishlistControllerApi(
     /**
      *
      *
-     * @return ApiResponse<kotlin.collections.List<WishlistDto>?>
+     * @return ApiResponse<AccountDto?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun getCurrentUserWishlistsWithHttpInfo(): ApiResponse<kotlin.collections.List<WishlistDto>?> {
-        val localVariableConfig = getCurrentUserWishlistsRequestConfig()
+    fun getConnectedUserWithHttpInfo(): ApiResponse<AccountDto?> {
+        val localVariableConfig = getConnectedUserRequestConfig()
 
-        return request<Unit, kotlin.collections.List<WishlistDto>>(
+        return request<Unit, AccountDto>(
             localVariableConfig,
         )
     }
 
     /**
-     * To obtain the request config of the operation getCurrentUserWishlists
+     * To obtain the request config of the operation getConnectedUser
      *
      * @return RequestConfig
      */
-    fun getCurrentUserWishlistsRequestConfig(): RequestConfig<Unit> {
+    fun getConnectedUserRequestConfig(): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
 
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/api/wishlist/current",
+            path = "/api/account/current",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -497,7 +468,8 @@ class WishlistControllerApi(
     /**
      *
      *
-     * @return kotlin.collections.List<WishlistDto>
+     * @param userId
+     * @return AccountDto
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      * @throws UnsupportedOperationException If the API returns an informational or redirection response
@@ -512,11 +484,11 @@ class WishlistControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun getSharedWishlists(): kotlin.collections.List<WishlistDto> {
-        val localVarResponse = getSharedWishlistsWithHttpInfo()
+    fun getUserById(userId: kotlin.Long): AccountDto {
+        val localVarResponse = getUserByIdWithHttpInfo(userId = userId)
 
         return when (localVarResponse.responseType) {
-            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<WishlistDto>
+            ResponseType.Success -> (localVarResponse as Success<*>).data as AccountDto
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
@@ -541,33 +513,35 @@ class WishlistControllerApi(
     /**
      *
      *
-     * @return ApiResponse<kotlin.collections.List<WishlistDto>?>
+     * @param userId
+     * @return ApiResponse<AccountDto?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun getSharedWishlistsWithHttpInfo(): ApiResponse<kotlin.collections.List<WishlistDto>?> {
-        val localVariableConfig = getSharedWishlistsRequestConfig()
+    fun getUserByIdWithHttpInfo(userId: kotlin.Long): ApiResponse<AccountDto?> {
+        val localVariableConfig = getUserByIdRequestConfig(userId = userId)
 
-        return request<Unit, kotlin.collections.List<WishlistDto>>(
+        return request<Unit, AccountDto>(
             localVariableConfig,
         )
     }
 
     /**
-     * To obtain the request config of the operation getSharedWishlists
+     * To obtain the request config of the operation getUserById
      *
+     * @param userId
      * @return RequestConfig
      */
-    fun getSharedWishlistsRequestConfig(): RequestConfig<Unit> {
+    fun getUserByIdRequestConfig(userId: kotlin.Long): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
 
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/api/wishlist/shared",
+            path = "/api/account/{userId}".replace("{" + "userId" + "}", encodeURIComponent(userId.toString())),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -578,92 +552,6 @@ class WishlistControllerApi(
     /**
      *
      *
-     * @param id
-     * @return WishlistDto
-     * @throws IllegalStateException If the request is not correctly configured
-     * @throws IOException Rethrows the OkHttp execute method exception
-     * @throws UnsupportedOperationException If the API returns an informational or redirection response
-     * @throws ClientException If the API returns a client error response
-     * @throws ServerException If the API returns a server error response
-     */
-    @Suppress("UNCHECKED_CAST")
-    @Throws(
-        IllegalStateException::class,
-        IOException::class,
-        UnsupportedOperationException::class,
-        ClientException::class,
-        ServerException::class,
-    )
-    fun getWishlistById(id: kotlin.Long): WishlistDto {
-        val localVarResponse = getWishlistByIdWithHttpInfo(id = id)
-
-        return when (localVarResponse.responseType) {
-            ResponseType.Success -> (localVarResponse as Success<*>).data as WishlistDto
-            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
-            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
-            ResponseType.ClientError -> {
-                val localVarError = localVarResponse as ClientError<*>
-                throw ClientException(
-                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
-                    localVarError.statusCode,
-                    localVarResponse,
-                )
-            }
-            ResponseType.ServerError -> {
-                val localVarError = localVarResponse as ServerError<*>
-                throw ServerException(
-                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
-                    localVarError.statusCode,
-                    localVarResponse,
-                )
-            }
-        }
-    }
-
-    /**
-     *
-     *
-     * @param id
-     * @return ApiResponse<WishlistDto?>
-     * @throws IllegalStateException If the request is not correctly configured
-     * @throws IOException Rethrows the OkHttp execute method exception
-     */
-    @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class)
-    fun getWishlistByIdWithHttpInfo(id: kotlin.Long): ApiResponse<WishlistDto?> {
-        val localVariableConfig = getWishlistByIdRequestConfig(id = id)
-
-        return request<Unit, WishlistDto>(
-            localVariableConfig,
-        )
-    }
-
-    /**
-     * To obtain the request config of the operation getWishlistById
-     *
-     * @param id
-     * @return RequestConfig
-     */
-    fun getWishlistByIdRequestConfig(id: kotlin.Long): RequestConfig<Unit> {
-        val localVariableBody = null
-        val localVariableQuery: MultiValueMap = mutableMapOf()
-        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
-
-        return RequestConfig(
-            method = RequestMethod.GET,
-            path = "/api/wishlist/{id}".replace("{" + "id" + "}", encodeURIComponent(id.toString())),
-            query = localVariableQuery,
-            headers = localVariableHeaders,
-            requiresAuthentication = true,
-            body = localVariableBody,
-        )
-    }
-
-    /**
-     *
-     *
-     * @param wishlistId
-     * @param productId
      * @return kotlin.String
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -679,11 +567,8 @@ class WishlistControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun removeProductFromWishlist(
-        wishlistId: kotlin.Long,
-        productId: kotlin.Long,
-    ): kotlin.String {
-        val localVarResponse = removeProductFromWishlistWithHttpInfo(wishlistId = wishlistId, productId = productId)
+    fun loginFailure(): kotlin.String {
+        val localVarResponse = loginFailureWithHttpInfo()
 
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
@@ -711,19 +596,14 @@ class WishlistControllerApi(
     /**
      *
      *
-     * @param wishlistId
-     * @param productId
      * @return ApiResponse<kotlin.String?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun removeProductFromWishlistWithHttpInfo(
-        wishlistId: kotlin.Long,
-        productId: kotlin.Long,
-    ): ApiResponse<kotlin.String?> {
-        val localVariableConfig = removeProductFromWishlistRequestConfig(wishlistId = wishlistId, productId = productId)
+    fun loginFailureWithHttpInfo(): ApiResponse<kotlin.String?> {
+        val localVariableConfig = loginFailureRequestConfig()
 
         return request<Unit, kotlin.String>(
             localVariableConfig,
@@ -731,28 +611,18 @@ class WishlistControllerApi(
     }
 
     /**
-     * To obtain the request config of the operation removeProductFromWishlist
+     * To obtain the request config of the operation loginFailure
      *
-     * @param wishlistId
-     * @param productId
      * @return RequestConfig
      */
-    fun removeProductFromWishlistRequestConfig(
-        wishlistId: kotlin.Long,
-        productId: kotlin.Long,
-    ): RequestConfig<Unit> {
+    fun loginFailureRequestConfig(): RequestConfig<Unit> {
         val localVariableBody = null
-        val localVariableQuery: MultiValueMap =
-            mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
-                .apply {
-                    put("wishlistId", listOf(wishlistId.toString()))
-                    put("productId", listOf(productId.toString()))
-                }
+        val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
 
         return RequestConfig(
-            method = RequestMethod.PATCH,
-            path = "/api/wishlist/removeProduct",
+            method = RequestMethod.GET,
+            path = "/api/account/login-failure",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -763,8 +633,6 @@ class WishlistControllerApi(
     /**
      *
      *
-     * @param wishlistId
-     * @param userId
      * @return kotlin.String
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -780,11 +648,8 @@ class WishlistControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun removeUserFromWishlist(
-        wishlistId: kotlin.Long,
-        userId: kotlin.Long,
-    ): kotlin.String {
-        val localVarResponse = removeUserFromWishlistWithHttpInfo(wishlistId = wishlistId, userId = userId)
+    fun loginSuccess(): kotlin.String {
+        val localVarResponse = loginSuccessWithHttpInfo()
 
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
@@ -812,19 +677,14 @@ class WishlistControllerApi(
     /**
      *
      *
-     * @param wishlistId
-     * @param userId
      * @return ApiResponse<kotlin.String?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun removeUserFromWishlistWithHttpInfo(
-        wishlistId: kotlin.Long,
-        userId: kotlin.Long,
-    ): ApiResponse<kotlin.String?> {
-        val localVariableConfig = removeUserFromWishlistRequestConfig(wishlistId = wishlistId, userId = userId)
+    fun loginSuccessWithHttpInfo(): ApiResponse<kotlin.String?> {
+        val localVariableConfig = loginSuccessRequestConfig()
 
         return request<Unit, kotlin.String>(
             localVariableConfig,
@@ -832,28 +692,18 @@ class WishlistControllerApi(
     }
 
     /**
-     * To obtain the request config of the operation removeUserFromWishlist
+     * To obtain the request config of the operation loginSuccess
      *
-     * @param wishlistId
-     * @param userId
      * @return RequestConfig
      */
-    fun removeUserFromWishlistRequestConfig(
-        wishlistId: kotlin.Long,
-        userId: kotlin.Long,
-    ): RequestConfig<Unit> {
+    fun loginSuccessRequestConfig(): RequestConfig<Unit> {
         val localVariableBody = null
-        val localVariableQuery: MultiValueMap =
-            mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
-                .apply {
-                    put("wishlistId", listOf(wishlistId.toString()))
-                    put("userId", listOf(userId.toString()))
-                }
+        val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
 
         return RequestConfig(
-            method = RequestMethod.PATCH,
-            path = "/api/wishlist/removeUser",
+            method = RequestMethod.GET,
+            path = "/api/account/login-success",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -864,8 +714,7 @@ class WishlistControllerApi(
     /**
      *
      *
-     * @param wishlistDto
-     * @return kotlin.String
+     * @return kotlin.Any
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      * @throws UnsupportedOperationException If the API returns an informational or redirection response
@@ -880,11 +729,11 @@ class WishlistControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun updateWishlist(wishlistDto: WishlistDto): kotlin.String {
-        val localVarResponse = updateWishlistWithHttpInfo(wishlistDto = wishlistDto)
+    fun logout(): kotlin.Any {
+        val localVarResponse = logoutWithHttpInfo()
 
         return when (localVarResponse.responseType) {
-            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
+            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.Any
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
@@ -909,36 +758,366 @@ class WishlistControllerApi(
     /**
      *
      *
-     * @param wishlistDto
-     * @return ApiResponse<kotlin.String?>
+     * @return ApiResponse<kotlin.Any?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun updateWishlistWithHttpInfo(wishlistDto: WishlistDto): ApiResponse<kotlin.String?> {
-        val localVariableConfig = updateWishlistRequestConfig(wishlistDto = wishlistDto)
+    fun logoutWithHttpInfo(): ApiResponse<kotlin.Any?> {
+        val localVariableConfig = logoutRequestConfig()
 
-        return request<WishlistDto, kotlin.String>(
+        return request<Unit, kotlin.Any>(
             localVariableConfig,
         )
     }
 
     /**
-     * To obtain the request config of the operation updateWishlist
+     * To obtain the request config of the operation logout
      *
-     * @param wishlistDto
      * @return RequestConfig
      */
-    fun updateWishlistRequestConfig(wishlistDto: WishlistDto): RequestConfig<WishlistDto> {
-        val localVariableBody = wishlistDto
+    fun logoutRequestConfig(): RequestConfig<Unit> {
+        val localVariableBody = null
+        val localVariableQuery: MultiValueMap = mutableMapOf()
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+
+        return RequestConfig(
+            method = RequestMethod.GET,
+            path = "/api/account/logout",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            body = localVariableBody,
+        )
+    }
+
+    /**
+     *
+     *
+     * @return void
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun refreshToken() {
+        val localVarResponse = refreshTokenWithHttpInfo()
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> Unit
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return ApiResponse<Unit?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Throws(IllegalStateException::class, IOException::class)
+    fun refreshTokenWithHttpInfo(): ApiResponse<Unit?> {
+        val localVariableConfig = refreshTokenRequestConfig()
+
+        return request<Unit, Unit>(
+            localVariableConfig,
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation refreshToken
+     *
+     * @return RequestConfig
+     */
+    fun refreshTokenRequestConfig(): RequestConfig<Unit> {
+        val localVariableBody = null
+        val localVariableQuery: MultiValueMap = mutableMapOf()
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+
+        return RequestConfig(
+            method = RequestMethod.POST,
+            path = "/api/account/refresh-token",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            body = localVariableBody,
+        )
+    }
+
+    /**
+     *
+     *
+     * @param registerRequest
+     * @return AuthenticationResponse
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun register(registerRequest: RegisterRequest): AuthenticationResponse {
+        val localVarResponse = registerWithHttpInfo(registerRequest = registerRequest)
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> (localVarResponse as Success<*>).data as AuthenticationResponse
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param registerRequest
+     * @return ApiResponse<AuthenticationResponse?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class)
+    fun registerWithHttpInfo(registerRequest: RegisterRequest): ApiResponse<AuthenticationResponse?> {
+        val localVariableConfig = registerRequestConfig(registerRequest = registerRequest)
+
+        return request<RegisterRequest, AuthenticationResponse>(
+            localVariableConfig,
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation register
+     *
+     * @param registerRequest
+     * @return RequestConfig
+     */
+    fun registerRequestConfig(registerRequest: RegisterRequest): RequestConfig<RegisterRequest> {
+        val localVariableBody = registerRequest
+        val localVariableQuery: MultiValueMap = mutableMapOf()
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+        localVariableHeaders["Content-Type"] = "application/json"
+
+        return RequestConfig(
+            method = RequestMethod.POST,
+            path = "/api/account/register",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            body = localVariableBody,
+        )
+    }
+
+    /**
+     *
+     *
+     * @param userId
+     * @return kotlin.Any
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun unbanUser(userId: kotlin.Long): kotlin.Any {
+        val localVarResponse = unbanUserWithHttpInfo(userId = userId)
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.Any
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param userId
+     * @return ApiResponse<kotlin.Any?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class)
+    fun unbanUserWithHttpInfo(userId: kotlin.Long): ApiResponse<kotlin.Any?> {
+        val localVariableConfig = unbanUserRequestConfig(userId = userId)
+
+        return request<Unit, kotlin.Any>(
+            localVariableConfig,
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation unbanUser
+     *
+     * @param userId
+     * @return RequestConfig
+     */
+    fun unbanUserRequestConfig(userId: kotlin.Long): RequestConfig<Unit> {
+        val localVariableBody = null
+        val localVariableQuery: MultiValueMap = mutableMapOf()
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+
+        return RequestConfig(
+            method = RequestMethod.PATCH,
+            path = "/api/account/unban/{userId}".replace("{" + "userId" + "}", encodeURIComponent(userId.toString())),
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            body = localVariableBody,
+        )
+    }
+
+    /**
+     *
+     *
+     * @param accountDto
+     * @return kotlin.Any
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun updateUser(accountDto: AccountDto): kotlin.Any {
+        val localVarResponse = updateUserWithHttpInfo(accountDto = accountDto)
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.Any
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param accountDto
+     * @return ApiResponse<kotlin.Any?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class)
+    fun updateUserWithHttpInfo(accountDto: AccountDto): ApiResponse<kotlin.Any?> {
+        val localVariableConfig = updateUserRequestConfig(accountDto = accountDto)
+
+        return request<AccountDto, kotlin.Any>(
+            localVariableConfig,
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation updateUser
+     *
+     * @param accountDto
+     * @return RequestConfig
+     */
+    fun updateUserRequestConfig(accountDto: AccountDto): RequestConfig<AccountDto> {
+        val localVariableBody = accountDto
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
         localVariableHeaders["Content-Type"] = "application/json"
 
         return RequestConfig(
             method = RequestMethod.PUT,
-            path = "/api/wishlist",
+            path = "/api/account",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,

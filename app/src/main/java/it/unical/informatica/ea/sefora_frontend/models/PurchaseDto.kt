@@ -20,16 +20,22 @@ import com.squareup.moshi.Json
 /**
  *
  *
- * @param userCartId
+ * @param userPurchaseId
  * @param products
  * @param id
+ * @param purchaseDate
+ * @param totalPurchasePrice
  */
 
-data class CartDto(
-    @Json(name = "userCartId")
-    val userCartId: kotlin.Long,
+data class PurchaseDto(
+    @Json(name = "userPurchaseId")
+    val userPurchaseId: kotlin.Long,
     @Json(name = "products")
     val products: kotlin.collections.List<ProductShortDto>,
     @Json(name = "id")
     val id: kotlin.Long? = null,
+    @Json(name = "purchaseDate")
+    val purchaseDate: java.time.LocalDate? = null,
+    @Json(name = "totalPurchasePrice")
+    val totalPurchasePrice: kotlin.Double? = null,
 )

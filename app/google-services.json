@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "79691045414",
+    "project_id": "sefora-22ff0",
+    "storage_bucket": "sefora-22ff0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79691045414:android:09cbd743cda0b52ded24e7",
+        "android_client_info": {
+          "package_name": "it.unical.informatica.ea.sefora_frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwosWCuWeKx-fxkypnCJQHAlBoiJHvKfo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

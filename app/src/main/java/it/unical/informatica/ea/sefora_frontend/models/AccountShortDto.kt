@@ -20,13 +20,16 @@ import com.squareup.moshi.Json
 /**
  *
  *
- * @param password
+ * @param id
  * @param email
+ * @param firstname
  */
 
-data class AuthenticationRequest(
-    @Json(name = "password")
-    val password: kotlin.String? = null,
+data class AccountShortDto(
+    @Json(name = "id")
+    val id: kotlin.Long,
     @Json(name = "email")
-    val email: kotlin.String? = null,
+    val email: kotlin.String,
+    @Json(name = "firstname")
+    val firstname: kotlin.String,
 )

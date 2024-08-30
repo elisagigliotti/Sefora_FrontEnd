@@ -1,4 +1,4 @@
-package it.unical.informatica.ea.sefora_frontend.infrastructure
+package org.openapitools.client.infrastructure
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson
@@ -7,13 +7,8 @@ import java.time.format.DateTimeFormatter
 
 class OffsetDateTimeAdapter {
     @ToJson
-    fun toJson(value: OffsetDateTime): String {
-        return DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(value)
-    }
+    fun toJson(value: OffsetDateTime): String = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(value)
 
     @FromJson
-    fun fromJson(value: String): OffsetDateTime {
-        return OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-    }
-
+    fun fromJson(value: String): OffsetDateTime = OffsetDateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
 }

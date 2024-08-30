@@ -1,4 +1,4 @@
-package it.unical.informatica.ea.sefora_frontend.infrastructure
+package org.openapitools.client.infrastructure
 
 /**
  * Defines a config object for a given part of a multi-part request.
@@ -7,5 +7,5 @@ package it.unical.informatica.ea.sefora_frontend.infrastructure
  */
 data class PartConfig<T>(
     val headers: MutableMap<String, String> = mutableMapOf(),
-    val body: T? = null
+    val body: T? = null,
 )

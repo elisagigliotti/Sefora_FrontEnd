@@ -10,182 +10,43 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport", "unused"
+    "UnusedImport",
 )
 
-package it.unical.informatica.ea.sefora_frontend.apis
+package org.openapitools.client.apis
 
-import java.io.IOException
-import okhttp3.OkHttpClient
 import okhttp3.HttpUrl
+import okhttp3.OkHttpClient
+import org.openapitools.client.infrastructure.ApiClient
+import org.openapitools.client.infrastructure.ApiResponse
+import org.openapitools.client.infrastructure.ClientError
+import org.openapitools.client.infrastructure.ClientException
+import org.openapitools.client.infrastructure.MultiValueMap
+import org.openapitools.client.infrastructure.RequestConfig
+import org.openapitools.client.infrastructure.RequestMethod
+import org.openapitools.client.infrastructure.ResponseType
+import org.openapitools.client.infrastructure.ServerError
+import org.openapitools.client.infrastructure.ServerException
+import org.openapitools.client.infrastructure.Success
+import org.openapitools.client.models.CartDto
+import java.io.IOException
 
-import it.unical.informatica.ea.sefora_frontend.models.CartDto
-import it.unical.informatica.ea.sefora_frontend.BuildConfig
-import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiClient
-import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiResponse
-import it.unical.informatica.ea.sefora_frontend.infrastructure.ClientException
-import it.unical.informatica.ea.sefora_frontend.infrastructure.ClientError
-import it.unical.informatica.ea.sefora_frontend.infrastructure.ServerException
-import it.unical.informatica.ea.sefora_frontend.infrastructure.ServerError
-import it.unical.informatica.ea.sefora_frontend.infrastructure.MultiValueMap
-import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestConfig
-import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestMethod
-import it.unical.informatica.ea.sefora_frontend.infrastructure.ResponseType
-import it.unical.informatica.ea.sefora_frontend.infrastructure.Success
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-
-class CartControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHttpClient = ApiClient.defaultClient) : ApiClient(basePath, client) {
+class CartControllerApi(
+    basePath: kotlin.String = defaultBasePath,
+    client: OkHttpClient = ApiClient.defaultClient,
+) : ApiClient(basePath, client) {
     companion object {
         @JvmStatic
         val defaultBasePath: String by lazy {
-            System.getProperties().getProperty(ApiClient.baseUrlKey, BuildConfig.SERVER_ADDRESS)
+            System.getProperties().getProperty(ApiClient.baseUrlKey, "http://localhost:8080")
         }
     }
 
     /**
-     * 
-     * 
-     * @param cartDto 
-     * @return CartDto
-     * @throws IllegalStateException If the request is not correctly configured
-     * @throws IOException Rethrows the OkHttp execute method exception
-     * @throws UnsupportedOperationException If the API returns an informational or redirection response
-     * @throws ClientException If the API returns a client error response
-     * @throws ServerException If the API returns a server error response
-     */
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    suspend fun createCart(cartDto: CartDto) : CartDto = withContext(Dispatchers.IO){
-        val localVarResponse = createCartWithHttpInfo(cartDto = cartDto)
-
-        return@withContext when (localVarResponse.responseType) {
-            ResponseType.Success -> (localVarResponse as Success<*>).data as CartDto
-            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
-            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
-            ResponseType.ClientError -> {
-                val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
-            }
-
-            ResponseType.ServerError -> {
-                val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
-            }
-        }
-    }
-
-    /**
-     * 
-     * 
-     * @param cartDto 
-     * @return ApiResponse<CartDto?>
-     * @throws IllegalStateException If the request is not correctly configured
-     * @throws IOException Rethrows the OkHttp execute method exception
-     */
-    @Throws(IllegalStateException::class, IOException::class)
-    fun createCartWithHttpInfo(cartDto: CartDto) : ApiResponse<CartDto?> {
-        val localVariableConfig = createCartRequestConfig(cartDto = cartDto)
-
-        return request<CartDto, CartDto>(
-            localVariableConfig
-        )
-    }
-
-    /**
-     * To obtain the request config of the operation createCart
      *
-     * @param cartDto 
-     * @return RequestConfig
-     */
-    fun createCartRequestConfig(cartDto: CartDto) : RequestConfig<CartDto> {
-        val localVariableBody = cartDto
-        val localVariableQuery: MultiValueMap = mutableMapOf()
-        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
-        localVariableHeaders["Content-Type"] = "application/json"
-        
-        return RequestConfig(
-            method = RequestMethod.POST,
-            path = "/api/cart",
-            query = localVariableQuery,
-            headers = localVariableHeaders,
-            requiresAuthentication = true,
-            body = localVariableBody
-        )
-    }
-
-    /**
-     * 
-     * 
-     * @param id 
-     * @return CartDto
-     * @throws IllegalStateException If the request is not correctly configured
-     * @throws IOException Rethrows the OkHttp execute method exception
-     * @throws UnsupportedOperationException If the API returns an informational or redirection response
-     * @throws ClientException If the API returns a client error response
-     * @throws ServerException If the API returns a server error response
-     */
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    suspend fun getCartById(id: kotlin.Long) : CartDto = withContext(Dispatchers.IO){
-        val localVarResponse = getCartByIdWithHttpInfo(id = id)
-
-        return@withContext when (localVarResponse.responseType) {
-            ResponseType.Success -> (localVarResponse as Success<*>).data as CartDto
-            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
-            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
-            ResponseType.ClientError -> {
-                val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
-            }
-
-            ResponseType.ServerError -> {
-                val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
-            }
-        }
-    }
-
-    /**
-     * 
-     * 
-     * @param id 
-     * @return ApiResponse<CartDto?>
-     * @throws IllegalStateException If the request is not correctly configured
-     * @throws IOException Rethrows the OkHttp execute method exception
-     */
-    @Throws(IllegalStateException::class, IOException::class)
-    fun getCartByIdWithHttpInfo(id: kotlin.Long) : ApiResponse<CartDto?> {
-        val localVariableConfig = getCartByIdRequestConfig(id = id)
-
-        return request<Unit, CartDto>(
-            localVariableConfig
-        )
-    }
-
-    /**
-     * To obtain the request config of the operation getCartById
      *
-     * @param id 
-     * @return RequestConfig
-     */
-    fun getCartByIdRequestConfig(id: kotlin.Long) : RequestConfig<Unit> {
-        val localVariableBody = null
-        val localVariableQuery: MultiValueMap = mutableMapOf()
-        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
-        
-        return RequestConfig(
-            method = RequestMethod.GET,
-            path = "/api/cart/{id}".replace("{"+"id"+"}", encodeURIComponent(id.toString())),
-            query = localVariableQuery,
-            headers = localVariableHeaders,
-            requiresAuthentication = true,
-            body = localVariableBody
-        )
-    }
-
-    /**
-     * 
-     * 
-     * @param cartDto 
+     * @param cartId
+     * @param productId
      * @return kotlin.String
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
@@ -193,66 +54,625 @@ class CartControllerApi(basePath: kotlin.String = defaultBasePath, client: OkHtt
      * @throws ClientException If the API returns a client error response
      * @throws ServerException If the API returns a server error response
      */
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    suspend fun updateCart(cartDto: CartDto) : kotlin.String = withContext(Dispatchers.IO){
-        val localVarResponse = updateCartWithHttpInfo(cartDto = cartDto)
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun addProductToCart(
+        cartId: kotlin.Long,
+        productId: kotlin.Long,
+    ): kotlin.String {
+        val localVarResponse = addProductToCartWithHttpInfo(cartId = cartId, productId = productId)
 
-        return@withContext when (localVarResponse.responseType) {
+        return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
             }
-
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
             }
         }
     }
 
     /**
-     * 
-     * 
-     * @param cartDto 
+     *
+     *
+     * @param cartId
+     * @param productId
      * @return ApiResponse<kotlin.String?>
      * @throws IllegalStateException If the request is not correctly configured
      * @throws IOException Rethrows the OkHttp execute method exception
      */
+    @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun updateCartWithHttpInfo(cartDto: CartDto) : ApiResponse<kotlin.String?> {
+    fun addProductToCartWithHttpInfo(
+        cartId: kotlin.Long,
+        productId: kotlin.Long,
+    ): ApiResponse<kotlin.String?> {
+        val localVariableConfig = addProductToCartRequestConfig(cartId = cartId, productId = productId)
+
+        return request<Unit, kotlin.String>(
+            localVariableConfig,
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation addProductToCart
+     *
+     * @param cartId
+     * @param productId
+     * @return RequestConfig
+     */
+    fun addProductToCartRequestConfig(
+        cartId: kotlin.Long,
+        productId: kotlin.Long,
+    ): RequestConfig<Unit> {
+        val localVariableBody = null
+        val localVariableQuery: MultiValueMap =
+            mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
+                .apply {
+                    put("cartId", listOf(cartId.toString()))
+                    put("productId", listOf(productId.toString()))
+                }
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+
+        return RequestConfig(
+            method = RequestMethod.PATCH,
+            path = "/api/cart/addProduct",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            body = localVariableBody,
+        )
+    }
+
+    /**
+     *
+     *
+     * @param cartId
+     * @return kotlin.String
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun checkoutCart(cartId: kotlin.Long): kotlin.String {
+        val localVarResponse = checkoutCartWithHttpInfo(cartId = cartId)
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param cartId
+     * @return ApiResponse<kotlin.String?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class)
+    fun checkoutCartWithHttpInfo(cartId: kotlin.Long): ApiResponse<kotlin.String?> {
+        val localVariableConfig = checkoutCartRequestConfig(cartId = cartId)
+
+        return request<Unit, kotlin.String>(
+            localVariableConfig,
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation checkoutCart
+     *
+     * @param cartId
+     * @return RequestConfig
+     */
+    fun checkoutCartRequestConfig(cartId: kotlin.Long): RequestConfig<Unit> {
+        val localVariableBody = null
+        val localVariableQuery: MultiValueMap =
+            mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
+                .apply {
+                    put("cartId", listOf(cartId.toString()))
+                }
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+
+        return RequestConfig(
+            method = RequestMethod.PATCH,
+            path = "/api/cart/checkout",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            body = localVariableBody,
+        )
+    }
+
+    /**
+     *
+     *
+     * @param cartDto
+     * @return CartDto
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun createCart(cartDto: CartDto): CartDto {
+        val localVarResponse = createCartWithHttpInfo(cartDto = cartDto)
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> (localVarResponse as Success<*>).data as CartDto
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param cartDto
+     * @return ApiResponse<CartDto?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class)
+    fun createCartWithHttpInfo(cartDto: CartDto): ApiResponse<CartDto?> {
+        val localVariableConfig = createCartRequestConfig(cartDto = cartDto)
+
+        return request<CartDto, CartDto>(
+            localVariableConfig,
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation createCart
+     *
+     * @param cartDto
+     * @return RequestConfig
+     */
+    fun createCartRequestConfig(cartDto: CartDto): RequestConfig<CartDto> {
+        val localVariableBody = cartDto
+        val localVariableQuery: MultiValueMap = mutableMapOf()
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+        localVariableHeaders["Content-Type"] = "application/json"
+
+        return RequestConfig(
+            method = RequestMethod.POST,
+            path = "/api/cart",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            body = localVariableBody,
+        )
+    }
+
+    /**
+     *
+     *
+     * @param id
+     * @return CartDto
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun getCartById(id: kotlin.Long): CartDto {
+        val localVarResponse = getCartByIdWithHttpInfo(id = id)
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> (localVarResponse as Success<*>).data as CartDto
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param id
+     * @return ApiResponse<CartDto?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class)
+    fun getCartByIdWithHttpInfo(id: kotlin.Long): ApiResponse<CartDto?> {
+        val localVariableConfig = getCartByIdRequestConfig(id = id)
+
+        return request<Unit, CartDto>(
+            localVariableConfig,
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation getCartById
+     *
+     * @param id
+     * @return RequestConfig
+     */
+    fun getCartByIdRequestConfig(id: kotlin.Long): RequestConfig<Unit> {
+        val localVariableBody = null
+        val localVariableQuery: MultiValueMap = mutableMapOf()
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+
+        return RequestConfig(
+            method = RequestMethod.GET,
+            path = "/api/cart/{id}".replace("{" + "id" + "}", encodeURIComponent(id.toString())),
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            body = localVariableBody,
+        )
+    }
+
+    /**
+     *
+     *
+     * @return CartDto
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun getCurrentUserCart(): CartDto {
+        val localVarResponse = getCurrentUserCartWithHttpInfo()
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> (localVarResponse as Success<*>).data as CartDto
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return ApiResponse<CartDto?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class)
+    fun getCurrentUserCartWithHttpInfo(): ApiResponse<CartDto?> {
+        val localVariableConfig = getCurrentUserCartRequestConfig()
+
+        return request<Unit, CartDto>(
+            localVariableConfig,
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation getCurrentUserCart
+     *
+     * @return RequestConfig
+     */
+    fun getCurrentUserCartRequestConfig(): RequestConfig<Unit> {
+        val localVariableBody = null
+        val localVariableQuery: MultiValueMap = mutableMapOf()
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+
+        return RequestConfig(
+            method = RequestMethod.GET,
+            path = "/api/cart/current",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            body = localVariableBody,
+        )
+    }
+
+    /**
+     *
+     *
+     * @param cartId
+     * @param productId
+     * @return kotlin.String
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun removeProductFromCart(
+        cartId: kotlin.Long,
+        productId: kotlin.Long,
+    ): kotlin.String {
+        val localVarResponse = removeProductFromCartWithHttpInfo(cartId = cartId, productId = productId)
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param cartId
+     * @param productId
+     * @return ApiResponse<kotlin.String?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class)
+    fun removeProductFromCartWithHttpInfo(
+        cartId: kotlin.Long,
+        productId: kotlin.Long,
+    ): ApiResponse<kotlin.String?> {
+        val localVariableConfig = removeProductFromCartRequestConfig(cartId = cartId, productId = productId)
+
+        return request<Unit, kotlin.String>(
+            localVariableConfig,
+        )
+    }
+
+    /**
+     * To obtain the request config of the operation removeProductFromCart
+     *
+     * @param cartId
+     * @param productId
+     * @return RequestConfig
+     */
+    fun removeProductFromCartRequestConfig(
+        cartId: kotlin.Long,
+        productId: kotlin.Long,
+    ): RequestConfig<Unit> {
+        val localVariableBody = null
+        val localVariableQuery: MultiValueMap =
+            mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
+                .apply {
+                    put("cartId", listOf(cartId.toString()))
+                    put("productId", listOf(productId.toString()))
+                }
+        val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+
+        return RequestConfig(
+            method = RequestMethod.PATCH,
+            path = "/api/cart/removeProduct",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            body = localVariableBody,
+        )
+    }
+
+    /**
+     *
+     *
+     * @param cartDto
+     * @return kotlin.String
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class,
+    )
+    fun updateCart(cartDto: CartDto): kotlin.String {
+        val localVarResponse = updateCartWithHttpInfo(cartDto = cartDto)
+
+        return when (localVarResponse.responseType) {
+            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
+            ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
+            ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
+            ResponseType.ClientError -> {
+                val localVarError = localVarResponse as ClientError<*>
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+            ResponseType.ServerError -> {
+                val localVarError = localVarResponse as ServerError<*>
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()} ${localVarError.body}",
+                    localVarError.statusCode,
+                    localVarResponse,
+                )
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param cartDto
+     * @return ApiResponse<kotlin.String?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
+    @Suppress("UNCHECKED_CAST")
+    @Throws(IllegalStateException::class, IOException::class)
+    fun updateCartWithHttpInfo(cartDto: CartDto): ApiResponse<kotlin.String?> {
         val localVariableConfig = updateCartRequestConfig(cartDto = cartDto)
 
         return request<CartDto, kotlin.String>(
-            localVariableConfig
+            localVariableConfig,
         )
     }
 
     /**
      * To obtain the request config of the operation updateCart
      *
-     * @param cartDto 
+     * @param cartDto
      * @return RequestConfig
      */
-    fun updateCartRequestConfig(cartDto: CartDto) : RequestConfig<CartDto> {
+    fun updateCartRequestConfig(cartDto: CartDto): RequestConfig<CartDto> {
         val localVariableBody = cartDto
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
         localVariableHeaders["Content-Type"] = "application/json"
-        
+
         return RequestConfig(
             method = RequestMethod.PUT,
             path = "/api/cart",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
-            body = localVariableBody
+            body = localVariableBody,
         )
     }
 
-
     private fun encodeURIComponent(uriComponent: kotlin.String): kotlin.String =
-        HttpUrl.Builder().scheme("http").host("localhost").addPathSegment(uriComponent).build().encodedPathSegments[0]
+        HttpUrl
+            .Builder()
+            .scheme("http")
+            .host("localhost")
+            .addPathSegment(uriComponent)
+            .build()
+            .encodedPathSegments[0]
 }

@@ -10,70 +10,65 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
-package it.unical.informatica.ea.sefora_frontend.models
+package org.openapitools.client.models
 
-
+import android.graphics.Bitmap
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * 
  *
- * @param name 
- * @param quantity 
- * @param category 
- * @param imageProduct 
- * @param userProductId 
- * @param id 
- * @param description 
- * @param price 
+ *
+ * @param name
+ * @param category
+ * @param userProductId
+ * @param id
+ * @param description
+ * @param price
+ * @param imageProduct
  */
 
-
-data class ProductDto (
-
+data class ProductDto(
     @Json(name = "name")
     val name: kotlin.String,
-
-    @Json(name = "quantity")
-    val quantity: kotlin.Long,
-
     @Json(name = "category")
     val category: ProductDto.Category,
-
-    @Json(name = "imageProduct")
-    val imageProduct: kotlin.String,
-
     @Json(name = "userProductId")
     val userProductId: kotlin.Long,
-
     @Json(name = "id")
     val id: kotlin.Long? = null,
-
     @Json(name = "description")
     val description: kotlin.String? = null,
-
     @Json(name = "price")
-    val price: kotlin.Float? = null
-
+    val price: kotlin.Float? = null,
+    @Json(name = "imageProduct")
+    val imageProduct: Bitmap? = null,
 ) {
-
     /**
-     * 
+     *
      *
      * Values: MAKEUP,SKINCARE,HAIRCARE,FRAGRANCE,BATH_BODY
      */
     @JsonClass(generateAdapter = false)
-    enum class Category(val value: kotlin.String) {
-        @Json(name = "MAKEUP") MAKEUP("MAKEUP"),
-        @Json(name = "SKINCARE") SKINCARE("SKINCARE"),
-        @Json(name = "HAIRCARE") HAIRCARE("HAIRCARE"),
-        @Json(name = "FRAGRANCE") FRAGRANCE("FRAGRANCE"),
-        @Json(name = "BATH_BODY") BATH_BODY("BATH_BODY");
+    enum class Category(
+        val value: kotlin.String,
+    ) {
+        @Json(name = "MAKEUP")
+        MAKEUP("MAKEUP"),
+
+        @Json(name = "SKINCARE")
+        SKINCARE("SKINCARE"),
+
+        @Json(name = "HAIRCARE")
+        HAIRCARE("HAIRCARE"),
+
+        @Json(name = "FRAGRANCE")
+        FRAGRANCE("FRAGRANCE"),
+
+        @Json(name = "BATH_BODY")
+        BATH_BODY("BATH_BODY"),
     }
-
 }
-

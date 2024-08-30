@@ -10,25 +10,26 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
-package it.unical.informatica.ea.sefora_frontend.models
-
+package org.openapitools.client.models
 
 import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 
 /**
- * 
  *
- * @param authority 
+ *
+ * @param id
+ * @param name
+ * @param price
  */
 
-
-data class GrantedAuthority (
-
-    @Json(name = "authority")
-    val authority: kotlin.String? = null
-
+data class ProductShortDto(
+    @Json(name = "id")
+    val id: kotlin.Long,
+    @Json(name = "name")
+    val name: kotlin.String,
+    @Json(name = "price")
+    val price: kotlin.Float? = null,
 )

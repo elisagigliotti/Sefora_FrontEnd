@@ -10,56 +10,49 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
-package it.unical.informatica.ea.sefora_frontend.models
-
+package org.openapitools.client.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 /**
- * 
  *
- * @param firstname 
- * @param lastname 
- * @param email 
- * @param password 
- * @param role 
+ *
+ * @param firstname
+ * @param lastname
+ * @param email
+ * @param password
+ * @param role
  */
 
-
-data class RegisterRequest (
-
+data class RegisterRequest(
     @Json(name = "firstname")
     val firstname: kotlin.String? = null,
-
     @Json(name = "lastname")
     val lastname: kotlin.String? = null,
-
     @Json(name = "email")
     val email: kotlin.String? = null,
-
     @Json(name = "password")
     val password: kotlin.String? = null,
-
     @Json(name = "role")
-    val role: RegisterRequest.Role? = null
-
+    val role: RegisterRequest.Role? = null,
 ) {
-
     /**
-     * 
      *
-     * Values: USER,ADMIN,MANAGER
+     *
+     * Values: USER,ADMIN
      */
     @JsonClass(generateAdapter = false)
-    enum class Role(val value: kotlin.String) {
-        @Json(name = "USER") USER("USER"),
-        @Json(name = "ADMIN") ADMIN("ADMIN"),
-        @Json(name = "MANAGER") MANAGER("MANAGER");
+    enum class Role(
+        val value: kotlin.String,
+    ) {
+        @Json(name = "USER")
+        USER("USER"),
+
+        @Json(name = "ADMIN")
+        ADMIN("ADMIN"),
     }
-
 }
-

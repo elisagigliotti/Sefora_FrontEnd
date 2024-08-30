@@ -10,33 +10,26 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
-package it.unical.informatica.ea.sefora_frontend.models
-
+package org.openapitools.client.models
 
 import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 
 /**
- * 
  *
- * @param currentPassword 
- * @param newPassword 
- * @param confirmationPassword 
+ *
+ * @param currentPassword
+ * @param newPassword
+ * @param confirmationPassword
  */
 
-
-data class ChangePasswordRequest (
-
+data class ChangePasswordRequest(
     @Json(name = "currentPassword")
     val currentPassword: kotlin.String? = null,
-
     @Json(name = "newPassword")
     val newPassword: kotlin.String? = null,
-
     @Json(name = "confirmationPassword")
-    val confirmationPassword: kotlin.String? = null
-
+    val confirmationPassword: kotlin.String? = null,
 )
