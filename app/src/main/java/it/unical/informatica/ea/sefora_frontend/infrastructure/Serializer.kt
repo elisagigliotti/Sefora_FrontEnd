@@ -1,4 +1,4 @@
-package org.openapitools.client.infrastructure
+package it.unical.informatica.ea.sefora_frontend.infrastructure
 
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -17,6 +17,7 @@ object Serializer {
             .add(KotlinJsonAdapterFactory())
             .add(BigDecimalAdapter())
             .add(BigIntegerAdapter())
+            .add(BitmapConverter())
 
     @JvmStatic
     val moshi: Moshi by lazy {

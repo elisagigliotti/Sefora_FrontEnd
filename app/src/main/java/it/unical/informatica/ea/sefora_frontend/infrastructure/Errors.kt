@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package org.openapitools.client.infrastructure
+package it.unical.informatica.ea.sefora_frontend.infrastructure
 
 import java.lang.RuntimeException
 

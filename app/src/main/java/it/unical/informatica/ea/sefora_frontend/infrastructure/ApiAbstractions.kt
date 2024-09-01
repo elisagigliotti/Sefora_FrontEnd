@@ -1,4 +1,4 @@
-package org.openapitools.client.infrastructure
+package it.unical.informatica.ea.sefora_frontend.infrastructure
 
 typealias MultiValueMap = MutableMap<String, List<String>>
 

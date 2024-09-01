@@ -1,5 +1,7 @@
-package org.openapitools.client.infrastructure
+package it.unical.informatica.ea.sefora_frontend.infrastructure
 
+import android.annotation.SuppressLint
+import com.squareup.moshi.JsonReader
 import com.squareup.moshi.adapter
 import okhttp3.FormBody
 import okhttp3.Headers.Companion.toHeaders
@@ -21,6 +23,9 @@ import java.time.OffsetDateTime
 import java.time.OffsetTime
 import java.util.Locale
 import java.util.regex.Pattern
+import javax.inject.Inject
+
+
 
 val EMPTY_REQUEST: RequestBody = ByteArray(0).toRequestBody()
 
@@ -43,7 +48,7 @@ open class ApiClient(
         var username: String? = null
         var password: String? = null
         var accessToken: String? = null
-        const val baseUrlKey = "org.openapitools.client.baseUrl"
+        const val baseUrlKey = "it.unical.informatica.ea.sefora_frontend.baseUrl"
 
         @JvmStatic
         val defaultClient: OkHttpClient by lazy {
@@ -63,6 +68,11 @@ open class ApiClient(
     protected fun guessContentTypeFromFile(file: File): String {
         val contentType = URLConnection.guessContentTypeFromName(file.name)
         return contentType ?: "application/octet-stream"
+    }
+
+    // Set access token
+    fun setToken(token: String?) {
+        accessToken = token ?: ""
     }
 
     protected inline fun <reified T> requestBody(
@@ -191,12 +201,16 @@ open class ApiClient(
         }
 
         return when {
+            response.body?.contentLength() == 0L -> {
+                // Handle cases where the response body is empty or null
+                // This covers 204 No Content, 401, 403, or any other status with an empty body
+                null // Or return a suitable default value for your application
+            }
             mediaType == null || (mediaType.startsWith("application/") && mediaType.endsWith("json")) -> {
-                val bodyContent = body.string()
-                if (bodyContent.isEmpty()) {
-                    return null
-                }
-                Serializer.moshi.adapter<T>().fromJson(bodyContent)
+                val source = body.source() // Get BufferedSource directly from the response body
+                val jsonReader = JsonReader.of(source)
+                jsonReader.isLenient = true // Set lenient mode
+                Serializer.moshi.adapter<T>().fromJson(jsonReader)
             }
             mediaType == OctetMediaType -> body.bytes() as? T
             else -> throw UnsupportedOperationException("responseBody currently only supports JSON body.")
@@ -327,5 +341,11 @@ open class ApiClient(
             .adapter(T::class.java)
             .toJson(value)
             .replace("\"", "")
+    }
+
+    @SuppressLint("NotConstructor")
+    @Inject
+    fun ApiClient() {
+
     }
 }
