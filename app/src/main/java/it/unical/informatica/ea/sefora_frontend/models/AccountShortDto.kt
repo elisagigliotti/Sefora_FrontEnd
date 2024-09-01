@@ -10,12 +10,15 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport",
+    "UnusedImport"
 )
 
-package org.openapitools.client.models
+package it.unical.informatica.ea.sefora_frontend.models
 
+
+import android.graphics.Bitmap
 import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
 /**
  *
@@ -23,13 +26,43 @@ import com.squareup.moshi.Json
  * @param id
  * @param email
  * @param firstname
+ * @param role
+ * @param isBanned
+ * @param profileImage
  */
 
-data class AccountShortDto(
+@JsonClass(generateAdapter = true)
+data class AccountShortDto (
+
     @Json(name = "id")
     val id: kotlin.Long,
+
     @Json(name = "email")
     val email: kotlin.String,
+
     @Json(name = "firstname")
     val firstname: kotlin.String,
-)
+
+    @Json(name = "role")
+    val role: Role? = null,
+
+    @Json(name = "isBanned")
+    val isBanned: kotlin.Boolean? = null,
+
+    @Json(name = "profileImage")
+    val profileImage: Bitmap? = null
+
+) {
+
+    /**
+     *
+     *
+     * Values: USER,ADMIN
+     */
+    @JsonClass(generateAdapter = false)
+    enum class Role(val value: kotlin.String) {
+        @Json(name = "USER") USER("USER"),
+        @Json(name = "ADMIN") ADMIN("ADMIN");
+    }
+
+}

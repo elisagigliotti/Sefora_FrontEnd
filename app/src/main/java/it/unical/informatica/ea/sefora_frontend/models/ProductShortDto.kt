@@ -13,7 +13,7 @@
     "UnusedImport",
 )
 
-package org.openapitools.client.models
+package it.unical.informatica.ea.sefora_frontend.models
 
 import com.squareup.moshi.Json
 

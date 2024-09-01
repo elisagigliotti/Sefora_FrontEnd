@@ -13,10 +13,13 @@
     "UnusedImport",
 )
 
-package org.openapitools.client.models
+package it.unical.informatica.ea.sefora_frontend.models
 
+import android.graphics.Bitmap
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.serialization.Serializable
+import java.util.regex.Pattern
 
 /**
  *
@@ -35,27 +38,28 @@ import com.squareup.moshi.JsonClass
  * @param productsDto
  */
 
-data class AccountDto(
+@JsonClass(generateAdapter = true)
+data class AccountDto (
     @Json(name = "email")
-    val email: kotlin.String,
+    var email: kotlin.String,
     @Json(name = "role")
-    val role: AccountDto.Role,
+    var role: AccountDto.Role,
     @Json(name = "banned")
-    val banned: kotlin.Boolean,
+    var banned: kotlin.Boolean,
     @Json(name = "profileImage")
-    val profileImage: kotlin.String,
+    var profileImage: Bitmap? = null,
     @Json(name = "id")
     val id: kotlin.Long? = null,
     @Json(name = "firstname")
-    val firstname: kotlin.String? = null,
+    var firstname: kotlin.String,
     @Json(name = "lastname")
-    val lastname: kotlin.String? = null,
+    var lastname: kotlin.String,
     @Json(name = "phone")
-    val phone: kotlin.String? = null,
+    var phone: kotlin.String?,
     @Json(name = "cartId")
     val cartId: kotlin.Long? = null,
     @Json(name = "wishlistsDto")
-    val wishlistsDto: kotlin.collections.List<WishlistDto>? = null,
+    val wishlistsDto: WishlistDto? = null,
     @Json(name = "purchaseDto")
     val purchaseDto: kotlin.collections.List<PurchaseDto>? = null,
     @Json(name = "productsDto")
@@ -75,5 +79,39 @@ data class AccountDto(
 
         @Json(name = "ADMIN")
         ADMIN("ADMIN"),
+    }
+
+    companion object {
+        fun validateFirstName(firstName: String): Boolean {
+            return firstName.length in 2..30
+        }
+
+        fun validateLastName(lastName: String): Boolean {
+            return lastName.length in 2..30
+        }
+
+        fun validateEmail(email: String): Boolean {
+            val emailRegex = Pattern.compile(
+                "[a-zA-Z0-9+._%\\-]{1,256}" +
+                        "@" +
+                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                        "(" +
+                        "\\." +
+                        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                        ")+"
+            )
+            return emailRegex.matcher(email).matches()
+        }
+
+        fun validatePhone(phone: String): Boolean {
+            return android.util.Patterns.PHONE.matcher(phone).matches()
+        }
+
+        fun validatePassword(password: String): Boolean {
+            val passwordRegex = Pattern.compile(
+                "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#\$%^&+=!])(?=\\S+\$).{8,}\$"
+            )
+            return passwordRegex.matcher(password).matches()
+        }
     }
 }

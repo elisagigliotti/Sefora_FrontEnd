@@ -13,7 +13,7 @@
     "UnusedImport",
 )
 
-package org.openapitools.client.models
+package it.unical.informatica.ea.sefora_frontend.models
 
 import android.graphics.Bitmap
 import com.squareup.moshi.Json
@@ -30,7 +30,7 @@ import com.squareup.moshi.JsonClass
  * @param price
  * @param imageProduct
  */
-
+@JsonClass(generateAdapter = true)
 data class ProductDto(
     @Json(name = "name")
     val name: kotlin.String,

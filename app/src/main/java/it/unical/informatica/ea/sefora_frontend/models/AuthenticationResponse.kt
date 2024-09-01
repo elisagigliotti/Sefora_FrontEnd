@@ -13,7 +13,7 @@
     "UnusedImport",
 )
 
-package org.openapitools.client.models
+package it.unical.informatica.ea.sefora_frontend.models
 
 import com.squareup.moshi.Json
 
@@ -28,11 +28,11 @@ import com.squareup.moshi.Json
 
 data class AuthenticationResponse(
     @Json(name = "access_token")
-    val accessToken: kotlin.String? = null,
+    val accessToken: kotlin.String,
     @Json(name = "refresh_token")
-    val refreshToken: kotlin.String? = null,
+    val refreshToken: kotlin.String,
     @Json(name = "user")
-    val account: AccountDto? = null,
+    val account: AccountDto,
     @Json(name = "expires_in")
-    val expiresIn: kotlin.Long? = null,
+    val expiresIn: kotlin.Long
 )

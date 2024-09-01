@@ -13,7 +13,7 @@
     "UnusedImport",
 )
 
-package org.openapitools.client.models
+package it.unical.informatica.ea.sefora_frontend.models
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -21,23 +21,24 @@ import com.squareup.moshi.JsonClass
 /**
  *
  *
- * @param userWishlistId
- * @param products
+ * @param account
  * @param type
  * @param id
+ * @param products
  * @param name
  * @param sharedWithUsers
  */
 
+@JsonClass(generateAdapter = true)
 data class WishlistDto(
-    @Json(name = "userWishlistId")
-    val userWishlistId: kotlin.Long,
-    @Json(name = "products")
-    val products: kotlin.collections.List<ProductShortDto>,
+    @Json(name = "account")
+    val account: AccountShortDto,
     @Json(name = "type")
     val type: WishlistDto.Type,
     @Json(name = "id")
     val id: kotlin.Long? = null,
+    @Json(name = "products")
+    val products: kotlin.collections.List<ProductDto>? = null,
     @Json(name = "name")
     val name: kotlin.String? = null,
     @Json(name = "sharedWithUsers")
