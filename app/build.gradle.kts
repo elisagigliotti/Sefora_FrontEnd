@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -18,6 +20,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        manifestPlaceholders["appAuthRedirectScheme"] = "yourSchemeName"
     }
 
     buildTypes {
@@ -63,7 +66,7 @@ android {
             dimension = "environment"
             applicationIdSuffix = ".wifi"
             versionNameSuffix = "-wifi"
-            buildConfigField("String", "SERVER_ADDRESS", "\"http://192.168.1.251:8080\"")
+            buildConfigField("String", "SERVER_ADDRESS", "\"http://192.168.0.251:8080\"")
         }
     }
 }
@@ -77,6 +80,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.datastore.preferences.core.jvm)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -91,4 +95,19 @@ dependencies {
     implementation(libs.json)
     implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
+    implementation(libs.datastore)
+    implementation(libs.security.crypto)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.jwtdecode)
+    implementation(libs.appauth)
+    implementation(libs.kotlinx.serialization.json)
+    implementation (libs.hilt.android)
+    kapt (libs.hilt.android.compiler)
+    kapt (libs.androidx.hilt.compiler)
+    implementation (libs.androidx.hilt.navigation.compose)
+    // Google Sign-In
+    implementation("com.google.android.gms:play-services-auth:20.2.0")
+    implementation("androidx.compose.material3:material3:1.0.0-beta03")
+    implementation("androidx.compose.ui:ui:1.3.2")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.3.2")
 }
