@@ -13,22 +13,25 @@
     "UnusedImport",
 )
 
-package org.openapitools.client.apis
+package it.unical.informatica.ea.sefora_frontend.apis
 
+import it.unical.informatica.ea.sefora_frontend.BuildConfig
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
-import org.openapitools.client.infrastructure.ApiClient
-import org.openapitools.client.infrastructure.ApiResponse
-import org.openapitools.client.infrastructure.ClientError
-import org.openapitools.client.infrastructure.ClientException
-import org.openapitools.client.infrastructure.MultiValueMap
-import org.openapitools.client.infrastructure.RequestConfig
-import org.openapitools.client.infrastructure.RequestMethod
-import org.openapitools.client.infrastructure.ResponseType
-import org.openapitools.client.infrastructure.ServerError
-import org.openapitools.client.infrastructure.ServerException
-import org.openapitools.client.infrastructure.Success
-import org.openapitools.client.models.ProductDto
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiClient
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiResponse
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ClientError
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ClientException
+import it.unical.informatica.ea.sefora_frontend.infrastructure.MultiValueMap
+import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestConfig
+import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestMethod
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ResponseType
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ServerError
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ServerException
+import it.unical.informatica.ea.sefora_frontend.infrastructure.Success
+import it.unical.informatica.ea.sefora_frontend.models.ProductDto
 import java.io.IOException
 
 class ProductControllerApi(
@@ -38,7 +41,7 @@ class ProductControllerApi(
     companion object {
         @JvmStatic
         val defaultBasePath: String by lazy {
-            System.getProperties().getProperty(ApiClient.baseUrlKey, "http://localhost:8080")
+            System.getProperties().getProperty(ApiClient.baseUrlKey, BuildConfig.SERVER_ADDRESS)
         }
     }
 
@@ -61,10 +64,10 @@ class ProductControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun createProduct(productDto: ProductDto): ProductDto {
-        val localVarResponse = createProductWithHttpInfo(productDto = productDto)
+    suspend fun createProduct(productDto: ProductDto, token: String): ProductDto = withContext(Dispatchers.IO){
+        val localVarResponse = createProductWithHttpInfo(productDto = productDto, token = token)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as ProductDto
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -97,8 +100,8 @@ class ProductControllerApi(
      */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun createProductWithHttpInfo(productDto: ProductDto): ApiResponse<ProductDto?> {
-        val localVariableConfig = createProductRequestConfig(productDto = productDto)
+    fun createProductWithHttpInfo(productDto: ProductDto, token: String): ApiResponse<ProductDto?> {
+        val localVariableConfig = createProductRequestConfig(productDto = productDto, token = token)
 
         return request<ProductDto, ProductDto>(
             localVariableConfig,
@@ -111,11 +114,13 @@ class ProductControllerApi(
      * @param productDto
      * @return RequestConfig
      */
-    fun createProductRequestConfig(productDto: ProductDto): RequestConfig<ProductDto> {
+    fun createProductRequestConfig(productDto: ProductDto, token: String): RequestConfig<ProductDto> {
         val localVariableBody = productDto
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
         localVariableHeaders["Content-Type"] = "application/json"
+
+        localVariableHeaders["Authorization"] = "Bearer $token"
 
         return RequestConfig(
             method = RequestMethod.POST,
@@ -146,10 +151,10 @@ class ProductControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun deleteProduct(id: kotlin.Long): kotlin.String {
+    suspend fun deleteProduct(id: kotlin.Long): kotlin.String = withContext(Dispatchers.IO){
         val localVarResponse = deleteProductWithHttpInfo(id = id)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -229,10 +234,10 @@ class ProductControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun findProductsByCurrentUser(): kotlin.collections.List<ProductDto> {
+    suspend fun findProductsByCurrentUser(): kotlin.collections.List<ProductDto> = withContext(Dispatchers.IO){
         val localVarResponse = findProductsByCurrentUserWithHttpInfo()
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<ProductDto>
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -310,10 +315,10 @@ class ProductControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun getAllProducts(): kotlin.collections.List<ProductDto> {
+    suspend fun getAllProducts(): kotlin.collections.List<ProductDto> = withContext(Dispatchers.IO){
         val localVarResponse = getAllProductsWithHttpInfo()
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<ProductDto>
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -392,10 +397,10 @@ class ProductControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun getAllProductsByOwner(id: kotlin.Long): kotlin.collections.List<ProductDto> {
+    suspend fun getAllProductsByOwner(id: kotlin.Long): kotlin.collections.List<ProductDto> = withContext(Dispatchers.IO) {
         val localVarResponse = getAllProductsByOwnerWithHttpInfo(id = id)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<ProductDto>
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -476,10 +481,10 @@ class ProductControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun getProductById(id: kotlin.Long): ProductDto {
+    suspend fun getProductById(id: kotlin.Long): ProductDto = withContext(Dispatchers.IO){
         val localVarResponse = getProductByIdWithHttpInfo(id = id)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as ProductDto
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")

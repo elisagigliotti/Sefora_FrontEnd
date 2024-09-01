@@ -13,22 +13,25 @@
     "UnusedImport",
 )
 
-package org.openapitools.client.apis
+package it.unical.informatica.ea.sefora_frontend.apis
 
+import it.unical.informatica.ea.sefora_frontend.BuildConfig
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
-import org.openapitools.client.infrastructure.ApiClient
-import org.openapitools.client.infrastructure.ApiResponse
-import org.openapitools.client.infrastructure.ClientError
-import org.openapitools.client.infrastructure.ClientException
-import org.openapitools.client.infrastructure.MultiValueMap
-import org.openapitools.client.infrastructure.RequestConfig
-import org.openapitools.client.infrastructure.RequestMethod
-import org.openapitools.client.infrastructure.ResponseType
-import org.openapitools.client.infrastructure.ServerError
-import org.openapitools.client.infrastructure.ServerException
-import org.openapitools.client.infrastructure.Success
-import org.openapitools.client.models.CartDto
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiClient
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ApiResponse
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ClientError
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ClientException
+import it.unical.informatica.ea.sefora_frontend.infrastructure.MultiValueMap
+import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestConfig
+import it.unical.informatica.ea.sefora_frontend.infrastructure.RequestMethod
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ResponseType
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ServerError
+import it.unical.informatica.ea.sefora_frontend.infrastructure.ServerException
+import it.unical.informatica.ea.sefora_frontend.infrastructure.Success
+import it.unical.informatica.ea.sefora_frontend.models.CartDto
 import java.io.IOException
 
 class CartControllerApi(
@@ -38,7 +41,7 @@ class CartControllerApi(
     companion object {
         @JvmStatic
         val defaultBasePath: String by lazy {
-            System.getProperties().getProperty(ApiClient.baseUrlKey, "http://localhost:8080")
+            System.getProperties().getProperty(ApiClient.baseUrlKey, BuildConfig.SERVER_ADDRESS)
         }
     }
 
@@ -62,13 +65,13 @@ class CartControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun addProductToCart(
+    suspend fun addProductToCart(
         cartId: kotlin.Long,
         productId: kotlin.Long,
-    ): kotlin.String {
+    ): kotlin.String = withContext(Dispatchers.IO){
         val localVarResponse = addProductToCartWithHttpInfo(cartId = cartId, productId = productId)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -162,10 +165,10 @@ class CartControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun checkoutCart(cartId: kotlin.Long): kotlin.String {
+    suspend fun checkoutCart(cartId: kotlin.Long): kotlin.String = withContext(Dispatchers.IO){
         val localVarResponse = checkoutCartWithHttpInfo(cartId = cartId)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -250,10 +253,10 @@ class CartControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun createCart(cartDto: CartDto): CartDto {
+    suspend fun createCart(cartDto: CartDto): CartDto = withContext(Dispatchers.IO){
         val localVarResponse = createCartWithHttpInfo(cartDto = cartDto)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as CartDto
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -335,10 +338,10 @@ class CartControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun getCartById(id: kotlin.Long): CartDto {
+    suspend fun getCartById(id: kotlin.Long): CartDto = withContext(Dispatchers.IO){
         val localVarResponse = getCartByIdWithHttpInfo(id = id)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as CartDto
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -418,10 +421,10 @@ class CartControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun getCurrentUserCart(): CartDto {
+    suspend fun getCurrentUserCart(): CartDto = withContext(Dispatchers.IO){
         val localVarResponse = getCurrentUserCartWithHttpInfo()
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as CartDto
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -501,13 +504,13 @@ class CartControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun removeProductFromCart(
+    suspend fun removeProductFromCart(
         cartId: kotlin.Long,
         productId: kotlin.Long,
-    ): kotlin.String {
+    ): kotlin.String = withContext(Dispatchers.IO){
         val localVarResponse = removeProductFromCartWithHttpInfo(cartId = cartId, productId = productId)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
@@ -601,10 +604,10 @@ class CartControllerApi(
         ClientException::class,
         ServerException::class,
     )
-    fun updateCart(cartDto: CartDto): kotlin.String {
+    suspend fun updateCart(cartDto: CartDto): kotlin.String = withContext(Dispatchers.IO){
         val localVarResponse = updateCartWithHttpInfo(cartDto = cartDto)
 
-        return when (localVarResponse.responseType) {
+        return@withContext when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.String
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
