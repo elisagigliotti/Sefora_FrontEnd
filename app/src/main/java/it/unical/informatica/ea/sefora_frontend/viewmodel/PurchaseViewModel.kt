@@ -1,39 +1,58 @@
 package it.unical.informatica.ea.sefora_frontend.viewmodel
 
-import android.content.Context
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import it.unical.informatica.ea.sefora_frontend.apis.OrderControllerApi
-import it.unical.informatica.ea.sefora_frontend.apis.OrderProductControllerApi
+import dagger.hilt.android.lifecycle.HiltViewModel
+import it.unical.informatica.ea.sefora_frontend.apis.PurchaseControllerApi
 import it.unical.informatica.ea.sefora_frontend.auth.TokenManager
-import it.unical.informatica.ea.sefora_frontend.models.OrderDto
-import it.unical.informatica.ea.sefora_frontend.models.OrderProductDto
-import it.unical.informatica.ea.sefora_frontend.models.UserDto
+import it.unical.informatica.ea.sefora_frontend.models.PurchaseDto
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class OrderViewModel(val context : Context) :ViewModel() {
+data class PurchaseState(
+    val purchases: List<PurchaseDto> = emptyList()
+)
 
-    private val orderApi: OrderControllerApi = OrderControllerApi()
-    private val orderProductControllerApi = OrderProductControllerApi()
-    private val tokenManager = TokenManager(context)
-    val orderList: MutableState<Array<Pair<OrderDto, List<OrderProductDto>>>> = mutableStateOf(emptyArray())
-    var currentUser: UserDto? = null
+@HiltViewModel
+class PurchaseViewModel @Inject constructor(
+    private val tokenManager: TokenManager
+) :ViewModel() {
+    private val purchaseApi: PurchaseControllerApi = PurchaseControllerApi()
+    val isLoading = mutableStateOf(false)
+
+    private val _purchases = MutableStateFlow(PurchaseState())
+    val purchases: StateFlow<PurchaseState> = _purchases.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            currentUser = tokenManager.getUser()
-            getOrders(currentUser!!.id!!)
-        }
+        getPurchases()
     }
 
-    fun getOrders(id: Long) {
+    fun getPurchases() {
+        isLoading.value = true
         viewModelScope.launch {
-            val orders = orderApi.findOrdersbyUserId(id)
-            orderList.value = orders.map { order ->
-                order to orderProductControllerApi.getOrderProductsByOrderId(order.id!!)
-            }.toTypedArray()
+            try {
+                val purchases = purchaseApi.findOrdersByCurrentUser(tokenManager.getAccessToken()!!)
+                _purchases.value = _purchases.value.copy(
+                    purchases = purchases
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            isLoading.value = false
+        }
+    }
+    fun convertProductToPurchase(productId: Long, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                purchaseApi.convertProductToPurchase(productId, tokenManager.getAccessToken()!!)
+                onSuccess()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }
