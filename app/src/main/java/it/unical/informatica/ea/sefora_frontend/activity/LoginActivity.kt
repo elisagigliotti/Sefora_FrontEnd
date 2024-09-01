@@ -8,8 +8,21 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -17,13 +30,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import it.unical.informatica.ea.sefora_frontend.viewmodel.LoginViewModel
-import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
-import java.io.IOException
-
-// ... (other imports)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +42,7 @@ fun LoginActivity(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
+
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -150,44 +157,4 @@ fun InputTextField(
         visualTransformation = visualTransformation,
         trailingIcon = trailingIcon
     )
-}
-
-fun performRegistration(viewModel: LoginViewModel, onRegisterSuccess: () -> Unit) {
-    // Create a JSON object with the registration details.
-    val jsonObject = JSONObject().apply {
-        put("email", viewModel.email)
-        put("password", viewModel.password)
-    }
-
-    // Define the media type for the JSON payload.
-    val mediaType = "application/json; charset=utf-8".toMediaType()
-
-    // Create the request body with the JSON object and the correct media type.
-    val requestBody = jsonObject.toString().toRequestBody(mediaType)
-
-    // Build the request with the URL and request body.
-    val request = Request.Builder()
-        .url("https://yourapi.com/register")  // Replace with your actual registration URL.
-        .post(requestBody)
-        .build()
-
-    // Initialize OkHttp client.
-    val client = OkHttpClient()
-
-    // Asynchronously send the request.
-    client.newCall(request).enqueue(object : Callback {
-        override fun onFailure(call: Call, e: IOException) {
-            // Handle request failure by updating the UI with the error message.
-            viewModel.error = "Registration Failed: ${e.message}"
-        }
-
-        override fun onResponse(call: Call, response: Response) {
-            // Handle successful response or show an error based on the response.
-            if (response.isSuccessful) {
-                onRegisterSuccess()  // Trigger success callback.
-            } else {
-                viewModel.error = "Registration Failed: ${response.message}"
-            }
-        }
-    })
 }
